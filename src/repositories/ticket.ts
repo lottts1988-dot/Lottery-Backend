@@ -1,6 +1,6 @@
 import { Prisma, type Ticket } from "../../prisma/generated/prisma/client";
 import type { UserJwtPayload } from "../types/jwt";
-import type { CreateTicket, TicketFilter, UpdateTicket } from "../types/ticket";
+import type { TTicket, TicketFilter } from "../types/ticket";
 import {
   getCurrentMonthString,
   getNextMonthString,
@@ -10,7 +10,7 @@ import { paginate } from "../utils/paginate";
 import { prisma } from "../utils/prisma";
 
 export class TicketRepo {
-  public async createTicket(data: CreateTicket, reqUser: UserJwtPayload) {
+  public async createTicket(data: TTicket, reqUser: UserJwtPayload) {
     const { alphabet, number, status } = data;
 
     const date = getCurrentMonthString();
@@ -47,7 +47,11 @@ export class TicketRepo {
       isDeleted: false,
       date: currentMonth,
       ...(alphabet && { alphabet }),
-      ...(number && { number }),
+      ...(number && {
+        name: {
+          contains: number,
+        },
+      }),
     };
 
     const query: Prisma.TicketFindManyArgs = { where };
@@ -61,7 +65,7 @@ export class TicketRepo {
     );
   }
 
-  public async updateTicket(id: string, data: UpdateTicket) {
+  public async updateTicket(id: string, data: TTicket) {
     const { alphabet, number, status } = data;
 
     const result = prisma.ticket.update({

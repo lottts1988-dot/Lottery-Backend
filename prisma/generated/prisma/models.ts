@@ -11,4 +11,6 @@
 export type * from './models/User.ts'
 export type * from './models/Ticket.ts'
 export type * from './models/Card.ts'
+export type * from './models/Account.ts'
+export type * from './models/Lottery.ts'
 export type * from './commonInputTypes.ts'

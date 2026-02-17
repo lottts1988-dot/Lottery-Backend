@@ -1,13 +1,13 @@
 import type { TicketRepo } from "../repositories/ticket";
 import type { UserJwtPayload } from "../types/jwt";
-import type { CreateTicket, GetTicket, TicketFilter, UpdateTicket } from "../types/ticket";
+import type { TTicket, GetTicket, TicketFilter } from "../types/ticket";
 
 export class TicketService {
   constructor(private ticketRepo: TicketRepo) {
     this.ticketRepo = ticketRepo;
   }
 
-  public async createTicket(data: CreateTicket, reqUser: UserJwtPayload) {
+  public async createTicket(data: TTicket, reqUser: UserJwtPayload) {
     const createticket = await this.ticketRepo.createTicket(data, reqUser);
     return createticket;
   }
@@ -26,7 +26,7 @@ export class TicketService {
     return tickets;
   }
 
-  public async updateTicket(id: string, data: UpdateTicket) {
+  public async updateTicket(id: string, data: TTicket) {
     return this.ticketRepo.updateTicket(id, data);
   }
 

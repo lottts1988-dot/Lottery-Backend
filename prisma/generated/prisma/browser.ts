@@ -32,3 +32,13 @@ export type Ticket = Prisma.TicketModel
  * 
  */
 export type Card = Prisma.CardModel
+/**
+ * Model Account
+ * 
+ */
+export type Account = Prisma.AccountModel
+/**
+ * Model Lottery
+ * 
+ */
+export type Lottery = Prisma.LotteryModel

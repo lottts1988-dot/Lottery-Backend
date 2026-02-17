@@ -53,7 +53,9 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Ticket: 'Ticket',
-  Card: 'Card'
+  Card: 'Card',
+  Account: 'Account',
+  Lottery: 'Lottery'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -124,6 +126,47 @@ export const CardScalarFieldEnum = {
 } as const
 
 export type CardScalarFieldEnum = (typeof CardScalarFieldEnum)[keyof typeof CardScalarFieldEnum]
+
+
+export const AccountScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  phone: 'phone',
+  t1: 't1',
+  t2: 't2',
+  t3: 't3',
+  t4: 't4',
+  t5: 't5',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userid: 'userid',
+  cardid: 'cardid'
+} as const
+
+export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+
+
+export const LotteryScalarFieldEnum = {
+  id: 'id',
+  logo: 'logo',
+  title: 'title',
+  desc: 'desc',
+  org: 'org',
+  terms: 'terms',
+  price: 'price',
+  t1: 't1',
+  t2: 't2',
+  t3: 't3',
+  t4: 't4',
+  t5: 't5',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userid: 'userid'
+} as const
+
+export type LotteryScalarFieldEnum = (typeof LotteryScalarFieldEnum)[keyof typeof LotteryScalarFieldEnum]
 
 
 export const SortOrder = {

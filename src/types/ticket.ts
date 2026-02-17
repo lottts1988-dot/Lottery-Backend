@@ -1,4 +1,4 @@
-export interface CreateTicket {
+export interface TTicket {
   alphabet: string;
   number: string;
   status: string;
@@ -14,10 +14,4 @@ export interface GetTicket {
 export interface TicketFilter {
   alphabet?: string;
   number?: string;
-}
-
-export interface UpdateTicket {
-  alphabet: string;
-  number: string;
-  status: string;
 }

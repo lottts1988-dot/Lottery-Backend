@@ -30,6 +30,8 @@ model User {
 
   ticket        Ticket[]
   card          Card[]
+  account       Account[]
+  lottery       Lottery[]
 }
 
 model Ticket {
@@ -57,6 +59,48 @@ model Card {
   id            String   @id @default(uuid())
   icon          String
   name          String
+  t1            String?
+  t2            String?
+  t3            String?
+  t4            String?
+  t5            String?
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  userid        String
+  user          User @relation(fields: [userid], references: [id])
+
+  account       Account[]
+}
+
+model Account {
+  id            String   @id @default(uuid())
+  name          String
+  phone         String
+  t1            String?
+  t2            String?
+  t3            String?
+  t4            String?
+  t5            String?
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  userid        String
+  user          User @relation(fields: [userid], references: [id])
+  cardid        String
+  card          Card @relation(fields: [cardid], references: [id])
+}
+
+model Lottery {
+  id            String   @id @default(uuid())
+  logo          String
+  title         String
+  desc          String
+  org           Json[]
+  terms         String
+  price         String
   t1            String?
   t2            String?
   t3            String?

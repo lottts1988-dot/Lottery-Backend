@@ -1,18 +1,13 @@
 import type { CardRepo } from "../repositories/card";
 import type { UserJwtPayload } from "../types/jwt";
-import type {
-  CreateCard,
-  GetCard,
-  CardFilter,
-  UpdateCard,
-} from "../types/card";
+import type { TCard, GetCard, CardFilter } from "../types/card";
 
 export class CardService {
   constructor(private cardRepo: CardRepo) {
     this.cardRepo = cardRepo;
   }
 
-  public async createCard(data: CreateCard, reqUser: UserJwtPayload) {
+  public async createCard(data: TCard, reqUser: UserJwtPayload) {
     const createcard = await this.cardRepo.createCard(data, reqUser);
     return createcard;
   }
@@ -31,7 +26,7 @@ export class CardService {
     return cards;
   }
 
-  public async updateCard(id: string, data: UpdateCard) {
+  public async updateCard(id: string, data: TCard) {
     return this.cardRepo.updateCard(id, data);
   }
 

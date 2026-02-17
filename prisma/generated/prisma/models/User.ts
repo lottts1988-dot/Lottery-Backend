@@ -208,6 +208,8 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   ticket?: Prisma.TicketListRelationFilter
   card?: Prisma.CardListRelationFilter
+  account?: Prisma.AccountListRelationFilter
+  lottery?: Prisma.LotteryListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -221,6 +223,8 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   ticket?: Prisma.TicketOrderByRelationAggregateInput
   card?: Prisma.CardOrderByRelationAggregateInput
+  account?: Prisma.AccountOrderByRelationAggregateInput
+  lottery?: Prisma.LotteryOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -237,6 +241,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   ticket?: Prisma.TicketListRelationFilter
   card?: Prisma.CardListRelationFilter
+  account?: Prisma.AccountListRelationFilter
+  lottery?: Prisma.LotteryListRelationFilter
 }, "id" | "phone">
 
 export type UserOrderByWithAggregationInput = {
@@ -278,6 +284,8 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   ticket?: Prisma.TicketCreateNestedManyWithoutUserInput
   card?: Prisma.CardCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountCreateNestedManyWithoutUserInput
+  lottery?: Prisma.LotteryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -291,6 +299,8 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   ticket?: Prisma.TicketUncheckedCreateNestedManyWithoutUserInput
   card?: Prisma.CardUncheckedCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  lottery?: Prisma.LotteryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -304,6 +314,8 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticket?: Prisma.TicketUpdateManyWithoutUserNestedInput
   card?: Prisma.CardUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  lottery?: Prisma.LotteryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -317,6 +329,8 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticket?: Prisma.TicketUncheckedUpdateManyWithoutUserNestedInput
   card?: Prisma.CardUncheckedUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  lottery?: Prisma.LotteryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -434,6 +448,34 @@ export type UserUpdateOneRequiredWithoutCardNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCardInput, Prisma.UserUpdateWithoutCardInput>, Prisma.UserUncheckedUpdateWithoutCardInput>
 }
 
+export type UserCreateNestedOneWithoutAccountInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountInput, Prisma.UserUncheckedCreateWithoutAccountInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAccountNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountInput, Prisma.UserUncheckedCreateWithoutAccountInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountInput
+  upsert?: Prisma.UserUpsertWithoutAccountInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountInput, Prisma.UserUpdateWithoutAccountInput>, Prisma.UserUncheckedUpdateWithoutAccountInput>
+}
+
+export type UserCreateNestedOneWithoutLotteryInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLotteryInput, Prisma.UserUncheckedCreateWithoutLotteryInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLotteryInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutLotteryNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLotteryInput, Prisma.UserUncheckedCreateWithoutLotteryInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLotteryInput
+  upsert?: Prisma.UserUpsertWithoutLotteryInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLotteryInput, Prisma.UserUpdateWithoutLotteryInput>, Prisma.UserUncheckedUpdateWithoutLotteryInput>
+}
+
 export type UserCreateWithoutTicketInput = {
   id?: string
   phone: string
@@ -444,6 +486,8 @@ export type UserCreateWithoutTicketInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   card?: Prisma.CardCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountCreateNestedManyWithoutUserInput
+  lottery?: Prisma.LotteryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTicketInput = {
@@ -456,6 +500,8 @@ export type UserUncheckedCreateWithoutTicketInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   card?: Prisma.CardUncheckedCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  lottery?: Prisma.LotteryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTicketInput = {
@@ -484,6 +530,8 @@ export type UserUpdateWithoutTicketInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   card?: Prisma.CardUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  lottery?: Prisma.LotteryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTicketInput = {
@@ -496,6 +544,8 @@ export type UserUncheckedUpdateWithoutTicketInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   card?: Prisma.CardUncheckedUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  lottery?: Prisma.LotteryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCardInput = {
@@ -508,6 +558,8 @@ export type UserCreateWithoutCardInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   ticket?: Prisma.TicketCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountCreateNestedManyWithoutUserInput
+  lottery?: Prisma.LotteryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCardInput = {
@@ -520,6 +572,8 @@ export type UserUncheckedCreateWithoutCardInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   ticket?: Prisma.TicketUncheckedCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  lottery?: Prisma.LotteryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCardInput = {
@@ -548,6 +602,8 @@ export type UserUpdateWithoutCardInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticket?: Prisma.TicketUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  lottery?: Prisma.LotteryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCardInput = {
@@ -560,6 +616,152 @@ export type UserUncheckedUpdateWithoutCardInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticket?: Prisma.TicketUncheckedUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  lottery?: Prisma.LotteryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAccountInput = {
+  id?: string
+  phone: string
+  fullname: string
+  password: string
+  role: $Enums.Role
+  isDeleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ticket?: Prisma.TicketCreateNestedManyWithoutUserInput
+  card?: Prisma.CardCreateNestedManyWithoutUserInput
+  lottery?: Prisma.LotteryCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAccountInput = {
+  id?: string
+  phone: string
+  fullname: string
+  password: string
+  role: $Enums.Role
+  isDeleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ticket?: Prisma.TicketUncheckedCreateNestedManyWithoutUserInput
+  card?: Prisma.CardUncheckedCreateNestedManyWithoutUserInput
+  lottery?: Prisma.LotteryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAccountInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAccountInput, Prisma.UserUncheckedCreateWithoutAccountInput>
+}
+
+export type UserUpsertWithoutAccountInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAccountInput, Prisma.UserUncheckedUpdateWithoutAccountInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAccountInput, Prisma.UserUncheckedCreateWithoutAccountInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAccountInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAccountInput, Prisma.UserUncheckedUpdateWithoutAccountInput>
+}
+
+export type UserUpdateWithoutAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  fullname?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ticket?: Prisma.TicketUpdateManyWithoutUserNestedInput
+  card?: Prisma.CardUpdateManyWithoutUserNestedInput
+  lottery?: Prisma.LotteryUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  fullname?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ticket?: Prisma.TicketUncheckedUpdateManyWithoutUserNestedInput
+  card?: Prisma.CardUncheckedUpdateManyWithoutUserNestedInput
+  lottery?: Prisma.LotteryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutLotteryInput = {
+  id?: string
+  phone: string
+  fullname: string
+  password: string
+  role: $Enums.Role
+  isDeleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ticket?: Prisma.TicketCreateNestedManyWithoutUserInput
+  card?: Prisma.CardCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutLotteryInput = {
+  id?: string
+  phone: string
+  fullname: string
+  password: string
+  role: $Enums.Role
+  isDeleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ticket?: Prisma.TicketUncheckedCreateNestedManyWithoutUserInput
+  card?: Prisma.CardUncheckedCreateNestedManyWithoutUserInput
+  account?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutLotteryInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLotteryInput, Prisma.UserUncheckedCreateWithoutLotteryInput>
+}
+
+export type UserUpsertWithoutLotteryInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLotteryInput, Prisma.UserUncheckedUpdateWithoutLotteryInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLotteryInput, Prisma.UserUncheckedCreateWithoutLotteryInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLotteryInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLotteryInput, Prisma.UserUncheckedUpdateWithoutLotteryInput>
+}
+
+export type UserUpdateWithoutLotteryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  fullname?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ticket?: Prisma.TicketUpdateManyWithoutUserNestedInput
+  card?: Prisma.CardUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLotteryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  fullname?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ticket?: Prisma.TicketUncheckedUpdateManyWithoutUserNestedInput
+  card?: Prisma.CardUncheckedUpdateManyWithoutUserNestedInput
+  account?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -570,11 +772,15 @@ export type UserUncheckedUpdateWithoutCardInput = {
 export type UserCountOutputType = {
   ticket: number
   card: number
+  account: number
+  lottery: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ticket?: boolean | UserCountOutputTypeCountTicketArgs
   card?: boolean | UserCountOutputTypeCountCardArgs
+  account?: boolean | UserCountOutputTypeCountAccountArgs
+  lottery?: boolean | UserCountOutputTypeCountLotteryArgs
 }
 
 /**
@@ -601,6 +807,20 @@ export type UserCountOutputTypeCountCardArgs<ExtArgs extends runtime.Types.Exten
   where?: Prisma.CardWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAccountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AccountWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountLotteryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LotteryWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -613,6 +833,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   ticket?: boolean | Prisma.User$ticketArgs<ExtArgs>
   card?: boolean | Prisma.User$cardArgs<ExtArgs>
+  account?: boolean | Prisma.User$accountArgs<ExtArgs>
+  lottery?: boolean | Prisma.User$lotteryArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -653,6 +875,8 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ticket?: boolean | Prisma.User$ticketArgs<ExtArgs>
   card?: boolean | Prisma.User$cardArgs<ExtArgs>
+  account?: boolean | Prisma.User$accountArgs<ExtArgs>
+  lottery?: boolean | Prisma.User$lotteryArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -663,6 +887,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     ticket: Prisma.$TicketPayload<ExtArgs>[]
     card: Prisma.$CardPayload<ExtArgs>[]
+    account: Prisma.$AccountPayload<ExtArgs>[]
+    lottery: Prisma.$LotteryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1069,6 +1295,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   ticket<T extends Prisma.User$ticketArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ticketArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   card<T extends Prisma.User$cardArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cardArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  account<T extends Prisma.User$accountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  lottery<T extends Prisma.User$lotteryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lotteryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LotteryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1539,6 +1767,54 @@ export type User$cardArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   take?: number
   skip?: number
   distinct?: Prisma.CardScalarFieldEnum | Prisma.CardScalarFieldEnum[]
+}
+
+/**
+ * User.account
+ */
+export type User$accountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Account
+   */
+  select?: Prisma.AccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Account
+   */
+  omit?: Prisma.AccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AccountInclude<ExtArgs> | null
+  where?: Prisma.AccountWhereInput
+  orderBy?: Prisma.AccountOrderByWithRelationInput | Prisma.AccountOrderByWithRelationInput[]
+  cursor?: Prisma.AccountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[]
+}
+
+/**
+ * User.lottery
+ */
+export type User$lotteryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Lottery
+   */
+  select?: Prisma.LotterySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Lottery
+   */
+  omit?: Prisma.LotteryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LotteryInclude<ExtArgs> | null
+  where?: Prisma.LotteryWhereInput
+  orderBy?: Prisma.LotteryOrderByWithRelationInput | Prisma.LotteryOrderByWithRelationInput[]
+  cursor?: Prisma.LotteryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LotteryScalarFieldEnum | Prisma.LotteryScalarFieldEnum[]
 }
 
 /**

@@ -7,6 +7,15 @@ import { UserController } from "./controllers/user";
 import { TicketRepo } from "./repositories/ticket";
 import { TicketService } from "./services/ticket";
 import { TicketController } from "./controllers/ticket";
+import { CardRepo } from "./repositories/card";
+import { CardService } from "./services/card";
+import { CardController } from "./controllers/card";
+import { AccountRepo } from "./repositories/account";
+import { AccountController } from "./controllers/account";
+import { AccountService } from "./services/account";
+import { LotteryRepo } from "./repositories/lottery";
+import { LotteryController } from "./controllers/lottery";
+import { LotteryService } from "./services/lottery";
 
 const app = express();
 
@@ -20,11 +29,29 @@ const userController = new UserController(userService);
 
 app.use("/user", userController.router());
 
-const userRepo = new TicketRepo();
-const ticketService = new TicketService(userRepo);
+const ticketRepo = new TicketRepo();
+const ticketService = new TicketService(ticketRepo);
 const ticketController = new TicketController(ticketService);
 
 app.use("/ticket", ticketController.router());
+
+const cardRepo = new CardRepo();
+const cardService = new CardService(cardRepo);
+const cardController = new CardController(cardService);
+
+app.use("/card", cardController.router());
+
+const accountRepo = new AccountRepo();
+const accountService = new AccountService(accountRepo);
+const accountController = new AccountController(accountService);
+
+app.use("/account", accountController.router());
+
+const lotteryRepo = new LotteryRepo();
+const lotteryService = new LotteryService(lotteryRepo);
+const lotteryController = new LotteryController(lotteryService);
+
+app.use("/lottery", lotteryController.router());
 
 app.get("/", (_req, res) => {
   res.status(200).json({ returncode: "200", message: "API is working..." });

@@ -1,4 +1,4 @@
-export interface CreateCard {
+export interface TCard {
   icon: string;
   name: string;
 }
@@ -11,9 +11,4 @@ export interface GetCard {
 
 export interface CardFilter {
   name?: string;
-}
-
-export interface UpdateCard {
-  icon: string;
-  name: string;
 }
