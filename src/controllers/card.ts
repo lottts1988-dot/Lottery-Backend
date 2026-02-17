@@ -45,8 +45,14 @@ export class CardController {
       },
     );
 
-    router.post("/getcards", async (req: Request, res: Response) => {
+    router.post("/getcards", verifyJwt, async (req: Request, res: Response) => {
       try {
+        if (!req.user) {
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.UNAUTHORIZED,
+          });
+        }
         const result = await this.cardService.getCards(req.body);
         const { data, meta } = result;
         return res.json({
