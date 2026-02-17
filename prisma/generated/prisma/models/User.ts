@@ -207,6 +207,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   ticket?: Prisma.TicketListRelationFilter
+  card?: Prisma.CardListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -219,6 +220,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   ticket?: Prisma.TicketOrderByRelationAggregateInput
+  card?: Prisma.CardOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -234,6 +236,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   ticket?: Prisma.TicketListRelationFilter
+  card?: Prisma.CardListRelationFilter
 }, "id" | "phone">
 
 export type UserOrderByWithAggregationInput = {
@@ -274,6 +277,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   ticket?: Prisma.TicketCreateNestedManyWithoutUserInput
+  card?: Prisma.CardCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -286,6 +290,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   ticket?: Prisma.TicketUncheckedCreateNestedManyWithoutUserInput
+  card?: Prisma.CardUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -298,6 +303,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticket?: Prisma.TicketUpdateManyWithoutUserNestedInput
+  card?: Prisma.CardUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -310,6 +316,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticket?: Prisma.TicketUncheckedUpdateManyWithoutUserNestedInput
+  card?: Prisma.CardUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -413,6 +420,20 @@ export type UserUpdateOneRequiredWithoutTicketNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTicketInput, Prisma.UserUpdateWithoutTicketInput>, Prisma.UserUncheckedUpdateWithoutTicketInput>
 }
 
+export type UserCreateNestedOneWithoutCardInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCardInput, Prisma.UserUncheckedCreateWithoutCardInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCardInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCardNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCardInput, Prisma.UserUncheckedCreateWithoutCardInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCardInput
+  upsert?: Prisma.UserUpsertWithoutCardInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCardInput, Prisma.UserUpdateWithoutCardInput>, Prisma.UserUncheckedUpdateWithoutCardInput>
+}
+
 export type UserCreateWithoutTicketInput = {
   id?: string
   phone: string
@@ -422,6 +443,7 @@ export type UserCreateWithoutTicketInput = {
   isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  card?: Prisma.CardCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTicketInput = {
@@ -433,6 +455,7 @@ export type UserUncheckedCreateWithoutTicketInput = {
   isDeleted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  card?: Prisma.CardUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTicketInput = {
@@ -460,6 +483,7 @@ export type UserUpdateWithoutTicketInput = {
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  card?: Prisma.CardUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTicketInput = {
@@ -471,6 +495,71 @@ export type UserUncheckedUpdateWithoutTicketInput = {
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  card?: Prisma.CardUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCardInput = {
+  id?: string
+  phone: string
+  fullname: string
+  password: string
+  role: $Enums.Role
+  isDeleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ticket?: Prisma.TicketCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCardInput = {
+  id?: string
+  phone: string
+  fullname: string
+  password: string
+  role: $Enums.Role
+  isDeleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ticket?: Prisma.TicketUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCardInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCardInput, Prisma.UserUncheckedCreateWithoutCardInput>
+}
+
+export type UserUpsertWithoutCardInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCardInput, Prisma.UserUncheckedUpdateWithoutCardInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCardInput, Prisma.UserUncheckedCreateWithoutCardInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCardInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCardInput, Prisma.UserUncheckedUpdateWithoutCardInput>
+}
+
+export type UserUpdateWithoutCardInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  fullname?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ticket?: Prisma.TicketUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCardInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  fullname?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ticket?: Prisma.TicketUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -480,10 +569,12 @@ export type UserUncheckedUpdateWithoutTicketInput = {
 
 export type UserCountOutputType = {
   ticket: number
+  card: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ticket?: boolean | UserCountOutputTypeCountTicketArgs
+  card?: boolean | UserCountOutputTypeCountCardArgs
 }
 
 /**
@@ -503,6 +594,13 @@ export type UserCountOutputTypeCountTicketArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.TicketWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCardArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CardWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -514,6 +612,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   ticket?: boolean | Prisma.User$ticketArgs<ExtArgs>
+  card?: boolean | Prisma.User$cardArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -553,6 +652,7 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "phone" | "fullname" | "password" | "role" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ticket?: boolean | Prisma.User$ticketArgs<ExtArgs>
+  card?: boolean | Prisma.User$cardArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -562,6 +662,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     ticket: Prisma.$TicketPayload<ExtArgs>[]
+    card: Prisma.$CardPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -967,6 +1068,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   ticket<T extends Prisma.User$ticketArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ticketArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  card<T extends Prisma.User$cardArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$cardArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1413,6 +1515,30 @@ export type User$ticketArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.TicketScalarFieldEnum | Prisma.TicketScalarFieldEnum[]
+}
+
+/**
+ * User.card
+ */
+export type User$cardArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Card
+   */
+  select?: Prisma.CardSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Card
+   */
+  omit?: Prisma.CardOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CardInclude<ExtArgs> | null
+  where?: Prisma.CardWhereInput
+  orderBy?: Prisma.CardOrderByWithRelationInput | Prisma.CardOrderByWithRelationInput[]
+  cursor?: Prisma.CardWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CardScalarFieldEnum | Prisma.CardScalarFieldEnum[]
 }
 
 /**

@@ -64,27 +64,11 @@ export class TicketRepo {
   public async updateTicket(id: string, data: UpdateTicket) {
     const { alphabet, number, status } = data;
 
-    const lastTicket = await prisma.ticket.findFirst({
-      orderBy: { date: "desc" },
-    });
-
-    const lastNumber = lastTicket?.number ?? 0;
-
-    const lastMonth = lastTicket ? lastTicket.updatedAt.getMonth() : -1;
-    const currentMonth = new Date().getMonth();
-
-    let thisMonthNumber = lastNumber;
-
-    if (currentMonth !== lastMonth) {
-      thisMonthNumber = Number(lastNumber) + 1;
-    }
-
     const result = prisma.ticket.update({
       where: { id },
       data: {
         alphabet,
         number,
-        time: String(thisMonthNumber),
         status,
       },
     });

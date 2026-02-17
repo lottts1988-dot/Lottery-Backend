@@ -52,7 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Ticket: 'Ticket'
+  Ticket: 'Ticket',
+  Card: 'Card'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -105,6 +106,24 @@ export const TicketScalarFieldEnum = {
 } as const
 
 export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
+
+
+export const CardScalarFieldEnum = {
+  id: 'id',
+  icon: 'icon',
+  name: 'name',
+  t1: 't1',
+  t2: 't2',
+  t3: 't3',
+  t4: 't4',
+  t5: 't5',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userid: 'userid'
+} as const
+
+export type CardScalarFieldEnum = (typeof CardScalarFieldEnum)[keyof typeof CardScalarFieldEnum]
 
 
 export const SortOrder = {

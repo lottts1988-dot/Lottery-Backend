@@ -49,3 +49,8 @@ export type User = Prisma.UserModel
  * 
  */
 export type Ticket = Prisma.TicketModel
+/**
+ * Model Card
+ * 
+ */
+export type Card = Prisma.CardModel

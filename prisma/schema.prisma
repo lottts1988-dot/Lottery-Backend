@@ -29,6 +29,7 @@ model User {
   updatedAt     DateTime @updatedAt
 
   ticket        Ticket[]
+  card          Card[]
 }
 
 model Ticket {
@@ -39,6 +40,23 @@ model Ticket {
   date          String
   annoucedate   String
   status        String
+  t1            String?
+  t2            String?
+  t3            String?
+  t4            String?
+  t5            String?
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  userid        String
+  user          User @relation(fields: [userid], references: [id])
+}
+
+model Card {
+  id            String   @id @default(uuid())
+  icon          String
+  name          String
   t1            String?
   t2            String?
   t3            String?

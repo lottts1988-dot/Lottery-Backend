@@ -1,0 +1,20 @@
+-- CreateTable
+CREATE TABLE "Card" (
+    "id" TEXT NOT NULL,
+    "icon" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "t1" TEXT,
+    "t2" TEXT,
+    "t3" TEXT,
+    "t4" TEXT,
+    "t5" TEXT,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "userid" TEXT NOT NULL,
+
+    CONSTRAINT "Card_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "Card" ADD CONSTRAINT "Card_userid_fkey" FOREIGN KEY ("userid") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
