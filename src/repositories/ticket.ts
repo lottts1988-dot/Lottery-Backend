@@ -1,7 +1,11 @@
 import { Prisma, type Ticket } from "../../prisma/generated/prisma/client";
 import type { UserJwtPayload } from "../types/jwt";
 import type { CreateTicket, TicketFilter, UpdateTicket } from "../types/ticket";
-import { getCurrentMonthString, getNextMonthString, getTime } from "../utils/common";
+import {
+  getCurrentMonthString,
+  getNextMonthString,
+  getTime,
+} from "../utils/common";
 import { paginate } from "../utils/paginate";
 import { prisma } from "../utils/prisma";
 
@@ -23,7 +27,7 @@ export class TicketRepo {
         number,
         time,
         date,
-        annoucedate: `${nextmonth}-02`,
+        annoucedate: `${nextmonth}-01`,
         status,
       },
     });
@@ -53,7 +57,7 @@ export class TicketRepo {
       query,
       { page, perPage },
       {},
-      { updatedAt: "desc" },
+      { alphabet: "asc" },
     );
   }
 

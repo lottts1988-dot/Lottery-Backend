@@ -35,6 +35,9 @@ export function getNextMonthString(): string {
 
 export async function getTime(): Promise<string> {
   const lastTicket = await prisma.ticket.findFirst({
+    where: {
+      isDeleted: false,
+    },
     orderBy: { date: "desc" },
   });
 
