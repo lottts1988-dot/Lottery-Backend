@@ -8,6 +8,7 @@
     "db:migrate": "bunx prisma migrate dev",
     "db:studio": "bunx prisma studio",
     "dev": "bun --watch src/server.ts",
+    "build": "tsc",
     "lint": "eslint .",
     "prepare": "husky"
   },
