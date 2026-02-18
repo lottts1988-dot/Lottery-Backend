@@ -11,7 +11,7 @@ import { prisma } from "../utils/prisma";
 
 export class TicketRepo {
   public async createTicket(data: TTicket, reqUser: UserJwtPayload) {
-    const { alphabet, number, status } = data;
+    const { alphabet, number } = data;
 
     const date = getCurrentMonthString();
     const nextmonth = getNextMonthString();
@@ -28,7 +28,7 @@ export class TicketRepo {
         time,
         date,
         annoucedate: `${nextmonth}-01`,
-        status,
+        status: "01",
       },
     });
     return result;
@@ -67,14 +67,13 @@ export class TicketRepo {
   }
 
   public async updateTicket(id: string, data: TTicket) {
-    const { alphabet, number, status } = data;
+    const { alphabet, number } = data;
 
     const result = prisma.ticket.update({
       where: { id },
       data: {
         alphabet,
         number,
-        status,
       },
     });
     return result;

@@ -1,7 +1,6 @@
 export interface TTicket {
   alphabet: string;
   number: string;
-  status: string;
 }
 
 export interface GetTicket {

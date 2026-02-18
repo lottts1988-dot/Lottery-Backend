@@ -50,6 +50,8 @@ export class OrderRepo {
   public async updateOrderStatus(id: string, data: UpdateOrder) {
     const { status } = data;
 
+    // const oneOrder = await prisma.
+
     const result = prisma.order.update({
       where: { id },
       data: {

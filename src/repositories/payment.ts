@@ -22,7 +22,7 @@ export class PaymentRepo {
       },
     });
 
-    const result = await prisma.payment.create({
+    const payment = await prisma.payment.create({
       data: {
         ticket: {
           connect: ticket.map((id: string) => ({ id })),
@@ -38,13 +38,21 @@ export class PaymentRepo {
     const webURL = `http://localhost:3000/${invoiceno}`;
 
     const qrcode = Buffer.from(webURL, "utf-8").toString("base64");
-    await prisma.order.create({
+    const result = await prisma.order.create({
       data: {
         invoiceno,
         qrcode,
         status: "01",
-        paymentid: result.id,
+        paymentid: payment.id,
         lotteryid: lottery == null ? "" : lottery.id,
+      },
+      include: {
+        payment: {
+          include: {
+            ticket: true,
+          },
+        },
+        lottery: true,
       },
     });
     return result;

@@ -54,12 +54,10 @@ export class CardController {
           });
         }
         const result = await this.cardService.getCards(req.body);
-        const { data, meta } = result;
         return res.json({
           returncode: ReturnCode.SUCCESS,
           message: ReturnMessage.SUCCESS,
-          data,
-          meta,
+          data: result,
         });
       } catch (e: unknown) {
         if (e instanceof Error) {

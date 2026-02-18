@@ -52,12 +52,10 @@ export class TicketController {
           const result = await this.ticketService.getCurrentMonthTicket(
             req.body,
           );
-          const { data, meta } = result;
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,
-            data,
-            meta,
+            data: result,
           });
         } catch (e: unknown) {
           if (e instanceof Error) {
