@@ -19,12 +19,13 @@ export class LotteryRepo {
         org: org as unknown as Prisma.InputJsonValue[],
         terms,
         price,
+        isSelect: false,
       },
     });
     return result;
   }
 
-  public async getLotterys(
+  public async getLotteries(
     page: number,
     perPage: number,
     filters: LotteryFilter,
@@ -53,7 +54,7 @@ export class LotteryRepo {
       query,
       { page, perPage },
       {},
-      { updatedAt: "desc" },
+      { createdAt: "desc" },
     );
   }
 
@@ -70,6 +71,21 @@ export class LotteryRepo {
         terms,
         price,
       },
+    });
+    return result;
+  }
+
+  public async updateLotterySelect(id: string) {
+    const result = await prisma.$transaction(async (tx) => {
+      await tx.lottery.updateMany({
+        where: { isSelect: true },
+        data: { isSelect: false },
+      });
+
+      return tx.lottery.update({
+        where: { id },
+        data: { isSelect: true },
+      });
     });
     return result;
   }

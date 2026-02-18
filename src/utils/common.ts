@@ -55,3 +55,18 @@ export async function getTime(): Promise<string> {
   }
   return String(thisMonthNumber);
 }
+
+export function generateInvoice() {
+  const now = new Date();
+
+  const getRandomId = (min = 0, max = 500000) => {
+    const num = Math.floor(Math.random() * (max - min + 1)) + min;
+    return num.toString().padStart(6, "0");
+  };
+
+  const day = now.getUTCDate();
+  const month = now.getUTCMonth() + 1;
+  const year = now.getUTCFullYear();
+
+  return `${day}${month}${year}${getRandomId()}`;
+}

@@ -4,6 +4,16 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// Ticket status
+// 01 for open
+// 02 for pending
+// 03 for confirm
+
+// Order status
+// 01 for open
+// 02 for confirm
+// 03 for fail
+
 generator client {
   provider = "prisma-client"
   output   = "./generated/prisma"
@@ -53,6 +63,8 @@ model Ticket {
 
   userid        String
   user          User @relation(fields: [userid], references: [id])
+
+  payment       Payment[] @relation("TicketPayments")
 }
 
 model Card {
@@ -101,6 +113,7 @@ model Lottery {
   org           Json[]
   terms         String
   price         String
+  isSelect      Boolean
   t1            String?
   t2            String?
   t3            String?
@@ -112,4 +125,48 @@ model Lottery {
 
   userid        String
   user          User @relation(fields: [userid], references: [id])
+
+  order         Order[]
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  name          String
+  address       String
+  phone         String
+  purchasedate  String
+  screenshot    String
+
+  t1            String?
+  t2            String?
+  t3            String?
+  t4            String?
+  t5            String?
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  ticket        Ticket[] @relation("TicketPayments")
+  order         Order[]
+}
+
+model Order {
+  id            String   @id @default(uuid())
+  invoiceno     String   @unique
+  qrcode        String
+  status        String
+
+  paymentid     String
+  payment       Payment @relation(fields: [paymentid], references: [id])
+  lotteryid     String
+  lottery       Lottery @relation(fields: [lotteryid], references: [id])
+
+  t1            String?
+  t2            String?
+  t3            String?
+  t4            String?
+  t5            String?
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

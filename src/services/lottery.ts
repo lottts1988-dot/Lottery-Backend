@@ -12,12 +12,12 @@ export class LotteryService {
     return createlottery;
   }
 
-  public async getLotterys(data: GetLottery) {
+  public async getLotteries(data: GetLottery) {
     const { page = 1, limit = 20 } = data;
 
     const filters: LotteryFilter = data;
 
-    const lotterys = await this.lotteryRepo.getLotterys(
+    const lotterys = await this.lotteryRepo.getLotteries(
       Number(page),
       Number(limit),
       filters,
@@ -28,6 +28,10 @@ export class LotteryService {
 
   public async updateLottery(id: string, data: TLottery) {
     return this.lotteryRepo.updateLottery(id, data);
+  }
+
+    public async updateLotterySelect(id: string) {
+    return this.lotteryRepo.updateLotterySelect(id);
   }
 
   public async deleteLottery(id: string) {

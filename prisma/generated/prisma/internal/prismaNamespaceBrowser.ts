@@ -55,7 +55,9 @@ export const ModelName = {
   Ticket: 'Ticket',
   Card: 'Card',
   Account: 'Account',
-  Lottery: 'Lottery'
+  Lottery: 'Lottery',
+  Payment: 'Payment',
+  Order: 'Order'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -155,6 +157,7 @@ export const LotteryScalarFieldEnum = {
   org: 'org',
   terms: 'terms',
   price: 'price',
+  isSelect: 'isSelect',
   t1: 't1',
   t2: 't2',
   t3: 't3',
@@ -167,6 +170,46 @@ export const LotteryScalarFieldEnum = {
 } as const
 
 export type LotteryScalarFieldEnum = (typeof LotteryScalarFieldEnum)[keyof typeof LotteryScalarFieldEnum]
+
+
+export const PaymentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  address: 'address',
+  phone: 'phone',
+  purchasedate: 'purchasedate',
+  screenshot: 'screenshot',
+  t1: 't1',
+  t2: 't2',
+  t3: 't3',
+  t4: 't4',
+  t5: 't5',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const OrderScalarFieldEnum = {
+  id: 'id',
+  invoiceno: 'invoiceno',
+  qrcode: 'qrcode',
+  status: 'status',
+  paymentid: 'paymentid',
+  lotteryid: 'lotteryid',
+  t1: 't1',
+  t2: 't2',
+  t3: 't3',
+  t4: 't4',
+  t5: 't5',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
 
 
 export const SortOrder = {

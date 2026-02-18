@@ -1,17 +1,17 @@
 import { Router, type Request, type Response } from "express";
-import type { LotteryService } from "../services/lottery";
+import type { OrderService } from "../services/order";
 import { verifyJwt } from "../utils/jwt";
 import { ReturnCode, ReturnMessage } from "../types/response";
-import type { TLottery } from "../types/lottery";
+import type { UpdateOrder } from "../types/order";
 
-export class LotteryController {
-  constructor(private lotteryService: LotteryService) {}
+export class OrderController {
+  constructor(private orderService: OrderService) {}
 
   router(): Router {
     const router = Router();
 
     router.post(
-      "/createlottery",
+      "/getorders",
       verifyJwt,
       async (req: Request, res: Response) => {
         try {
@@ -21,45 +21,7 @@ export class LotteryController {
               message: ReturnMessage.UNAUTHORIZED,
             });
           }
-
-          const data: TLottery = req.body;
-
-          const result = await this.lotteryService.createLottery(
-            data,
-            req.user,
-          );
-          return res.json({
-            returncode: ReturnCode.SUCCESS,
-            message: ReturnMessage.SUCCESS,
-            data: result,
-          });
-        } catch (e: unknown) {
-          if (e instanceof Error) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: e.message,
-            });
-          }
-          return res.json({
-            returncode: ReturnCode.FAILED,
-            message: ReturnMessage.FAILED,
-          });
-        }
-      },
-    );
-
-    router.post(
-      "/getlotteries",
-      verifyJwt,
-      async (req: Request, res: Response) => {
-        try {
-          if (!req.user) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: ReturnMessage.UNAUTHORIZED,
-            });
-          }
-          const result = await this.lotteryService.getLotteries(req.body);
+          const result = await this.orderService.getOrders(req.body);
           const { data, meta } = result;
           return res.json({
             returncode: ReturnCode.SUCCESS,
@@ -82,8 +44,37 @@ export class LotteryController {
       },
     );
 
+    router.post("/getorderbyinv", async (req: Request, res: Response) => {
+      try {
+        const invoiceno: string = req.body.invoiceno;
+        if (!invoiceno) {
+          return res.json({
+            ReturnCode: ReturnCode.FAILED,
+            message: "Invoice No is required!",
+          });
+        }
+        const result = await this.orderService.getOrderByINV(req.body);
+        return res.json({
+          returncode: ReturnCode.SUCCESS,
+          message: ReturnMessage.SUCCESS,
+          result,
+        });
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: e.message,
+          });
+        }
+        return res.json({
+          returncode: ReturnCode.FAILED,
+          message: ReturnMessage.FAILED,
+        });
+      }
+    });
+
     router.post(
-      "/updatelottery",
+      "/updateorderstatus",
       verifyJwt,
       async (req: Request, res: Response) => {
         try {
@@ -101,9 +92,9 @@ export class LotteryController {
             });
           }
 
-          const data: TLottery = req.body;
+          const data: UpdateOrder = req.body;
 
-          const result = await this.lotteryService.updateLottery(id, data);
+          const result = await this.orderService.updateOrderStatus(id, data);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,
@@ -125,7 +116,7 @@ export class LotteryController {
     );
 
     router.post(
-      "/updatelotteryselect",
+      "/deleteorder",
       verifyJwt,
       async (req: Request, res: Response) => {
         try {
@@ -142,46 +133,7 @@ export class LotteryController {
               message: ReturnMessage.IDREQUIRED,
             });
           }
-          const result = await this.lotteryService.updateLotterySelect(id);
-          return res.json({
-            returncode: ReturnCode.SUCCESS,
-            message: ReturnMessage.SUCCESS,
-            data: result,
-          });
-        } catch (e: unknown) {
-          if (e instanceof Error) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: e.message,
-            });
-          }
-          return res.json({
-            returncode: ReturnCode.FAILED,
-            message: ReturnMessage.FAILED,
-          });
-        }
-      },
-    );
-
-    router.post(
-      "/deletelottery",
-      verifyJwt,
-      async (req: Request, res: Response) => {
-        try {
-          if (!req.user) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: ReturnMessage.UNAUTHORIZED,
-            });
-          }
-          const id: string = req.body.id;
-          if (!id) {
-            return res.json({
-              ReturnCode: ReturnCode.FAILED,
-              message: ReturnMessage.IDREQUIRED,
-            });
-          }
-          const result = await this.lotteryService.deleteLottery(id);
+          const result = await this.orderService.deleteOrder(id);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,

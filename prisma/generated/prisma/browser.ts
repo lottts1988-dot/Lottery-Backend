@@ -42,3 +42,13 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Lottery = Prisma.LotteryModel
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = Prisma.PaymentModel
+/**
+ * Model Order
+ * 
+ */
+export type Order = Prisma.OrderModel

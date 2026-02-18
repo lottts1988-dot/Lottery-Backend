@@ -16,6 +16,12 @@ import { AccountService } from "./services/account";
 import { LotteryRepo } from "./repositories/lottery";
 import { LotteryController } from "./controllers/lottery";
 import { LotteryService } from "./services/lottery";
+import { PaymentController } from "./controllers/payment";
+import { PaymentRepo } from "./repositories/payment";
+import { PaymentService } from "./services/payment";
+import { OrderController } from "./controllers/order";
+import { OrderRepo } from "./repositories/order";
+import { OrderService } from "./services/order";
 
 const app = express();
 
@@ -52,6 +58,18 @@ const lotteryService = new LotteryService(lotteryRepo);
 const lotteryController = new LotteryController(lotteryService);
 
 app.use("/lottery", lotteryController.router());
+
+const paymentRepo = new PaymentRepo();
+const paymentService = new PaymentService(paymentRepo);
+const paymentController = new PaymentController(paymentService);
+
+app.use("/payment", paymentController.router());
+
+const orderRepo = new OrderRepo();
+const orderService = new OrderService(orderRepo);
+const orderController = new OrderController(orderService);
+
+app.use("/order", orderController.router());
 
 app.get("/", (_req, res) => {
   res.status(200).json({ returncode: "200", message: "API is working..." });
