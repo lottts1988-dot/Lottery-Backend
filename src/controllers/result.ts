@@ -1,17 +1,19 @@
 import { Router, type Request, type Response } from "express";
-import type { TicketService } from "../services/ticket";
+import type { ResultService } from "../services/result";
 import { verifyJwt } from "../utils/jwt";
 import { ReturnCode, ReturnMessage } from "../types/response";
-import type { TTicket } from "../types/ticket";
+import type { TResult } from "../types/result";
+import { prisma } from "../utils/prisma";
+import { getCurrentMonthString } from "../utils/common";
 
-export class TicketController {
-  constructor(private ticketService: TicketService) {}
+export class ResultController {
+  constructor(private resultService: ResultService) {}
 
   router(): Router {
     const router = Router();
 
     router.post(
-      "/createticket",
+      "/createresult",
       verifyJwt,
       async (req: Request, res: Response) => {
         try {
@@ -21,10 +23,25 @@ export class TicketController {
               message: ReturnMessage.UNAUTHORIZED,
             });
           }
+          const date = getCurrentMonthString();
 
-          const data: TTicket = req.body;
+          const isAlreadyHaveOne = await prisma.result.findFirst({
+            where: {
+              isDeleted: false,
+              date,
+            },
+          });
 
-          const result = await this.ticketService.createTicket(data, req.user);
+          if (isAlreadyHaveOne) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: "This month result already created!",
+            });
+          }
+
+          const data: TResult = req.body;
+
+          const result = await this.resultService.createResult(data, req.user);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,
@@ -46,23 +63,10 @@ export class TicketController {
     );
 
     router.post(
-      "/createmultipleticket",
-      verifyJwt,
+      "/getcurrentmonthresult",
       async (req: Request, res: Response) => {
         try {
-          if (!req.user) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: ReturnMessage.UNAUTHORIZED,
-            });
-          }
-
-          const data: TTicket[] = req.body;
-
-          const result = await this.ticketService.createMultipleTicket(
-            data,
-            req.user,
-          );
+          const result = await this.resultService.getCurrentMonthResult();
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,
@@ -84,34 +88,7 @@ export class TicketController {
     );
 
     router.post(
-      "/getcurrentmonthticket",
-      async (req: Request, res: Response) => {
-        try {
-          const result = await this.ticketService.getCurrentMonthTicket(
-            req.body,
-          );
-          return res.json({
-            returncode: ReturnCode.SUCCESS,
-            message: ReturnMessage.SUCCESS,
-            data: result,
-          });
-        } catch (e: unknown) {
-          if (e instanceof Error) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: e.message,
-            });
-          }
-          return res.json({
-            returncode: ReturnCode.FAILED,
-            message: ReturnMessage.FAILED,
-          });
-        }
-      },
-    );
-
-    router.post(
-      "/updateticket",
+      "/updateresult",
       verifyJwt,
       async (req: Request, res: Response) => {
         try {
@@ -129,9 +106,9 @@ export class TicketController {
             });
           }
 
-          const data: TTicket = req.body;
+          const data: TResult = req.body;
 
-          const result = await this.ticketService.updateTicket(id, data);
+          const result = await this.resultService.updateResult(id, data);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,
@@ -153,7 +130,7 @@ export class TicketController {
     );
 
     router.post(
-      "/deleteticket",
+      "/deleteresult",
       verifyJwt,
       async (req: Request, res: Response) => {
         try {
@@ -170,7 +147,7 @@ export class TicketController {
               message: ReturnMessage.IDREQUIRED,
             });
           }
-          const result = await this.ticketService.deleteTicket(id);
+          const result = await this.resultService.deleteResult(id);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,

@@ -3,6 +3,5 @@ export interface TPayment {
   name: string;
   address: string;
   phone: string;
-  purchasedate: string;
   screenshot: string;
 }

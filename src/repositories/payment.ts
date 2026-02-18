@@ -4,7 +4,7 @@ import { prisma } from "../utils/prisma";
 
 export class PaymentRepo {
   public async createPayment(data: TPayment) {
-    const { ticket, name, address, phone, purchasedate, screenshot } = data;
+    const { ticket, name, address, phone, screenshot } = data;
 
     const lottery = await prisma.lottery.findFirst({
       where: {
@@ -30,7 +30,6 @@ export class PaymentRepo {
         name,
         address,
         phone,
-        purchasedate,
         screenshot,
       },
     });

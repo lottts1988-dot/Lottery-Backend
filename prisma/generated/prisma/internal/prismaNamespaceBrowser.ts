@@ -57,7 +57,8 @@ export const ModelName = {
   Account: 'Account',
   Lottery: 'Lottery',
   Payment: 'Payment',
-  Order: 'Order'
+  Order: 'Order',
+  Result: 'Result'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -210,6 +211,24 @@ export const OrderScalarFieldEnum = {
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
+
+
+export const ResultScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  image: 'image',
+  t1: 't1',
+  t2: 't2',
+  t3: 't3',
+  t4: 't4',
+  t5: 't5',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userid: 'userid'
+} as const
+
+export type ResultScalarFieldEnum = (typeof ResultScalarFieldEnum)[keyof typeof ResultScalarFieldEnum]
 
 
 export const SortOrder = {

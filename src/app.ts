@@ -22,6 +22,9 @@ import { PaymentService } from "./services/payment";
 import { OrderController } from "./controllers/order";
 import { OrderRepo } from "./repositories/order";
 import { OrderService } from "./services/order";
+import { ResultRepo } from "./repositories/result";
+import { ResultController } from "./controllers/result";
+import { ResultService } from "./services/result";
 
 const app = express();
 
@@ -70,6 +73,12 @@ const orderService = new OrderService(orderRepo);
 const orderController = new OrderController(orderService);
 
 app.use("/order", orderController.router());
+
+const resultRepo = new ResultRepo();
+const resultService = new ResultService(resultRepo);
+const resultController = new ResultController(resultService);
+
+app.use("/result", resultController.router());
 
 app.get("/", (_req, res) => {
   res.status(200).json({ returncode: "200", message: "API is working..." });

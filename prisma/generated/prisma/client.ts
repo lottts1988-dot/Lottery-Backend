@@ -74,3 +74,8 @@ export type Payment = Prisma.PaymentModel
  * 
  */
 export type Order = Prisma.OrderModel
+/**
+ * Model Result
+ * 
+ */
+export type Result = Prisma.ResultModel

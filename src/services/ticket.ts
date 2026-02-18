@@ -12,6 +12,14 @@ export class TicketService {
     return createticket;
   }
 
+  public async createMultipleTicket(data: TTicket[], reqUser: UserJwtPayload) {
+    const createMultipleTicket = await this.ticketRepo.createMultipleTicket(
+      data,
+      reqUser,
+    );
+    return createMultipleTicket;
+  }
+
   public async getCurrentMonthTicket(data: GetTicket) {
     const { page = 1, limit = 20 } = data;
 

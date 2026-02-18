@@ -1,7 +1,5 @@
 import { Role } from "../../prisma/generated/prisma/client";
 import { ReturnMessage } from "../types/response";
-import { prisma } from "./prisma";
-
 const ALLOWED_ROLES: Role[] = [Role.ROOTADMIN];
 
 export function showPermissionErr(role: Role): void {
@@ -34,26 +32,19 @@ export function getNextMonthString(): string {
 }
 
 export async function getTime(): Promise<string> {
-  const lastTicket = await prisma.ticket.findFirst({
-    where: {
-      isDeleted: false,
-    },
-    orderBy: { date: "desc" },
-  });
+  const baseYear = 2026;
+  const baseMonth = 1;
+  const baseValue = 33;
 
-  const lastNumber = lastTicket?.time ?? 0;
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
 
-  const lastDate = lastTicket ? new Date(lastTicket.date) : null;
+  const monthDiff = (currentYear - baseYear) * 12 + (currentMonth - baseMonth);
 
-  const lastMonth = lastDate ? lastDate.getMonth() : -1;
-  const currentMonth = new Date().getMonth();
+  const value = baseValue + monthDiff;
 
-  let thisMonthNumber = lastNumber;
-
-  if (currentMonth !== lastMonth) {
-    thisMonthNumber = Number(lastNumber) + 1;
-  }
-  return String(thisMonthNumber);
+  return String(value);
 }
 
 export function generateInvoice() {

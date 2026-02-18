@@ -34,6 +34,30 @@ export class TicketRepo {
     return result;
   }
 
+  public async createMultipleTicket(data: TTicket[], reqUser: UserJwtPayload) {
+    const date = getCurrentMonthString();
+    const nextmonth = getNextMonthString();
+
+    const userid = reqUser.id;
+
+    const time = await getTime();
+    return prisma.$transaction(
+      data.map((item) =>
+        prisma.ticket.create({
+          data: {
+            userid,
+            alphabet: item.alphabet,
+            number: item.number,
+            time,
+            date,
+            annoucedate: `${nextmonth}-01`,
+            status: "01",
+          },
+        }),
+      ),
+    );
+  }
+
   public async getCurrentMonthTicket(
     page: number,
     perPage: number,
