@@ -28,7 +28,6 @@ export class UserService {
       id: user.id,
       phone: user.phone,
       fullname: user.fullname,
-      password: user.password,
       role: user.role,
     };
 
@@ -73,7 +72,6 @@ export class UserService {
           id: user.id,
           phone: user.phone,
           fullname: user.fullname,
-          password: user.password,
           role: user.role,
         };
 
