@@ -11,6 +11,8 @@ export interface GetTicket {
 }
 
 export interface TicketFilter {
+  date?: string;
+  status?: string;
   alphabet?: string;
   number?: string;
 }

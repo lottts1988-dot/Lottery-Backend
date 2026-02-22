@@ -18,7 +18,7 @@ export class PaymentRepo {
         id: { in: ticket },
       },
       data: {
-        status: "02",
+        status: "04",
       },
     });
 

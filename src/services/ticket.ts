@@ -34,6 +34,20 @@ export class TicketService {
     return tickets;
   }
 
+  public async getAllTickets(data: GetTicket) {
+    const { page = 1, limit = 20 } = data;
+
+    const filters: TicketFilter = data;
+
+    const tickets = await this.ticketRepo.getAllTickets(
+      Number(page),
+      Number(limit),
+      filters,
+    );
+
+    return tickets;
+  }
+
   public async updateTicket(id: string, data: TTicket) {
     return this.ticketRepo.updateTicket(id, data);
   }

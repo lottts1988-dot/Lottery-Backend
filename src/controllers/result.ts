@@ -4,7 +4,7 @@ import { verifyJwt } from "../utils/jwt";
 import { ReturnCode, ReturnMessage } from "../types/response";
 import type { TResult } from "../types/result";
 import { prisma } from "../utils/prisma";
-import { getCurrentMonthString } from "../utils/common";
+import { apiKeyGuard, getCurrentMonthString } from "../utils/common";
 
 export class ResultController {
   constructor(private resultService: ResultService) {}
@@ -64,6 +64,7 @@ export class ResultController {
 
     router.post(
       "/getcurrentmonthresult",
+      apiKeyGuard,
       async (req: Request, res: Response) => {
         try {
           const result = await this.resultService.getCurrentMonthResult();

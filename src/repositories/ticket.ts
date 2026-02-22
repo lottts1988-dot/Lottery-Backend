@@ -90,6 +90,36 @@ export class TicketRepo {
     );
   }
 
+  public async getAllTickets(
+    page: number,
+    perPage: number,
+    filters: TicketFilter,
+  ) {
+    const { date, alphabet, number, status } = filters;
+
+    const where: Prisma.TicketWhereInput = {
+      isDeleted: false,
+      status: status,
+      date: date,
+      ...(alphabet && { alphabet }),
+      ...(number && {
+        name: {
+          contains: number,
+        },
+      }),
+    };
+
+    const query: Prisma.TicketFindManyArgs = { where };
+
+    return paginate<Ticket, Prisma.TicketFindManyArgs>(
+      prisma.ticket,
+      query,
+      { page, perPage },
+      {},
+      { alphabet: "asc" },
+    );
+  }
+
   public async updateTicket(id: string, data: TTicket) {
     const { alphabet, number } = data;
 

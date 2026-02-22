@@ -1,5 +1,24 @@
 import { Role } from "../../prisma/generated/prisma/client";
 import { ReturnMessage } from "../types/response";
+
+import crypto from "crypto";
+import type { Request, Response, NextFunction } from "express";
+
+export function apiKeyGuard(req: Request, res: Response, next: NextFunction) {
+  const key = req.header("x-api-key") || "";
+  const validKey = Bun.env.X_API_KEY || "";
+
+  const isValid =
+    key.length === validKey.length &&
+    crypto.timingSafeEqual(Buffer.from(key), Buffer.from(validKey));
+
+  if (!isValid) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  next();
+}
+
 const ALLOWED_ROLES: Role[] = [Role.ROOTADMIN];
 
 export function showPermissionErr(role: Role): void {

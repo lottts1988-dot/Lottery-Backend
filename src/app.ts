@@ -1,5 +1,5 @@
+import rateLimit from "express-rate-limit";
 import express from "express";
-import cors from "cors";
 import bodyParser from "body-parser";
 import { UserRepo } from "./repositories/user";
 import { UserService } from "./services/user";
@@ -25,10 +25,50 @@ import { OrderService } from "./services/order";
 import { ResultRepo } from "./repositories/result";
 import { ResultController } from "./controllers/result";
 import { ResultService } from "./services/result";
+import { UploadRepo } from "./repositories/upload";
+import { UploadService } from "./services/upload";
+import { UploadController } from "./controllers/upload";
 
 const app = express();
 
-app.use(cors());
+//// Security Secure
+export const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  statusCode: 200,
+  message: {
+    returnCode: "200",
+    message: "Too many requests, please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+// app.use(
+//   cors({
+//     origin: ["https://edulottmm.com"],
+//     methods: ["POST"],
+//     credentials: true,
+//   }),
+// );
+app.use(express.json({ limit: "100kb" }));
+const allowedOrigins = ["https://edulottmm.com"];
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (!origin) {
+    return res
+      .status(200)
+      .json({ returnCode: "200", message: "Origin required" });
+  }
+
+  if (!allowedOrigins.includes(origin)) {
+    return res.status(200).json({ returnCode: "200", message: "Wrong Origin" });
+  }
+
+  next();
+});
+////
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -79,6 +119,12 @@ const resultService = new ResultService(resultRepo);
 const resultController = new ResultController(resultService);
 
 app.use("/result", resultController.router());
+
+const uploadRepo = new UploadRepo();
+const uploadService = new UploadService(uploadRepo);
+const uploadController = new UploadController(uploadService);
+
+app.use("/images", uploadController.router());
 
 app.get("/", (_req, res) => {
   res.status(200).json({ returncode: "200", message: "API is working..." });

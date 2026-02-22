@@ -3,6 +3,7 @@ import type { TicketService } from "../services/ticket";
 import { verifyJwt } from "../utils/jwt";
 import { ReturnCode, ReturnMessage } from "../types/response";
 import type { TTicket } from "../types/ticket";
+import { apiKeyGuard } from "../utils/common";
 
 export class TicketController {
   constructor(private ticketService: TicketService) {}
@@ -85,11 +86,44 @@ export class TicketController {
 
     router.post(
       "/getcurrentmonthticket",
+      apiKeyGuard,
       async (req: Request, res: Response) => {
         try {
           const result = await this.ticketService.getCurrentMonthTicket(
             req.body,
           );
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
+    router.post(
+      "/getalltickets",
+      verifyJwt,
+      async (req: Request, res: Response) => {
+        try {
+          if (!req.user) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: ReturnMessage.UNAUTHORIZED,
+            });
+          }
+          const result = await this.ticketService.getAllTickets(req.body);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,

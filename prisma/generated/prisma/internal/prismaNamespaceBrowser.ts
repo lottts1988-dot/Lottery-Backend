@@ -58,7 +58,8 @@ export const ModelName = {
   Lottery: 'Lottery',
   Payment: 'Payment',
   Order: 'Order',
-  Result: 'Result'
+  Result: 'Result',
+  Image: 'Image'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -229,6 +230,16 @@ export const ResultScalarFieldEnum = {
 } as const
 
 export type ResultScalarFieldEnum = (typeof ResultScalarFieldEnum)[keyof typeof ResultScalarFieldEnum]
+
+
+export const ImageScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  key: 'key',
+  createdAt: 'createdAt'
+} as const
+
+export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
 
 
 export const SortOrder = {

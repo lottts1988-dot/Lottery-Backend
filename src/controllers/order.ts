@@ -3,6 +3,7 @@ import type { OrderService } from "../services/order";
 import { verifyJwt } from "../utils/jwt";
 import { ReturnCode, ReturnMessage } from "../types/response";
 import type { UpdateOrder } from "../types/order";
+import { apiKeyGuard } from "../utils/common";
 
 export class OrderController {
   constructor(private orderService: OrderService) {}
@@ -42,34 +43,38 @@ export class OrderController {
       },
     );
 
-    router.post("/getorderbyinv", async (req: Request, res: Response) => {
-      try {
-        const invoiceno: string = req.body.invoiceno;
-        if (!invoiceno) {
+    router.post(
+      "/getorderbyinv",
+      apiKeyGuard,
+      async (req: Request, res: Response) => {
+        try {
+          const invoiceno: string = req.body.invoiceno;
+          if (!invoiceno) {
+            return res.json({
+              ReturnCode: ReturnCode.FAILED,
+              message: "Invoice No is required!",
+            });
+          }
+          const result = await this.orderService.getOrderByINV(req.body);
           return res.json({
-            ReturnCode: ReturnCode.FAILED,
-            message: "Invoice No is required!",
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            result,
           });
-        }
-        const result = await this.orderService.getOrderByINV(req.body);
-        return res.json({
-          returncode: ReturnCode.SUCCESS,
-          message: ReturnMessage.SUCCESS,
-          result,
-        });
-      } catch (e: unknown) {
-        if (e instanceof Error) {
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
           return res.json({
             returncode: ReturnCode.FAILED,
-            message: e.message,
+            message: ReturnMessage.FAILED,
           });
         }
-        return res.json({
-          returncode: ReturnCode.FAILED,
-          message: ReturnMessage.FAILED,
-        });
-      }
-    });
+      },
+    );
 
     router.post(
       "/updateorderstatus",

@@ -50,13 +50,34 @@ export class OrderRepo {
   public async updateOrderStatus(id: string, data: UpdateOrder) {
     const { status } = data;
 
-    // const oneOrder = await prisma.
+    const oneOrder = await prisma.order.findFirst({
+      where: { id },
+      include: { payment: { include: { ticket: true } } },
+    });
+
+    const ticketls: string[] = [];
+
+    if (oneOrder?.payment?.ticket) {
+      for (const ticket of oneOrder.payment.ticket) {
+        ticketls.push(ticket.id);
+      }
+    }
+
+    await prisma.ticket.updateMany({
+      where: {
+        id: { in: ticketls },
+      },
+      data: {
+        status,
+      },
+    });
 
     const result = prisma.order.update({
       where: { id },
       data: {
         status,
       },
+      include: { payment: { include: { ticket: true } } },
     });
     return result;
   }
