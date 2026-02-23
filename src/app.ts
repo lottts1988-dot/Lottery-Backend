@@ -28,7 +28,6 @@ import { ResultService } from "./services/result";
 import { UploadRepo } from "./repositories/upload";
 import { UploadService } from "./services/upload";
 import { UploadController } from "./controllers/upload";
-import cors from "cors";
 
 const app = express();
 
@@ -45,12 +44,6 @@ export const globalLimiter = rateLimit({
   legacyHeaders: false,
 });
 app.use(express.json({ limit: "100kb" }));
-
-app.use(cors({
-  origin: 'http://localhost:4200/',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-}));
-
 
 // const allowedOrigins = ["https://edulottmm.com"];
 // app.use((req, res, next) => {
