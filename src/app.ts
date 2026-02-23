@@ -28,6 +28,7 @@ import { ResultService } from "./services/result";
 import { UploadRepo } from "./repositories/upload";
 import { UploadService } from "./services/upload";
 import { UploadController } from "./controllers/upload";
+import cors from "cors";
 
 const app = express();
 
@@ -43,30 +44,28 @@ export const globalLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
-// app.use(
-//   cors({
-//     origin: ["https://edulottmm.com"],
-//     methods: ["POST"],
-//     credentials: true,
-//   }),
-// );
 app.use(express.json({ limit: "100kb" }));
-const allowedOrigins = ["https://edulottmm.com"];
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
 
-  if (!origin) {
-    return res
-      .status(200)
-      .json({ returnCode: "200", message: "Origin required" });
-  }
+app.use(cors({
+  origin: 'http://localhost:4200/',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-  if (!allowedOrigins.includes(origin)) {
-    return res.status(200).json({ returnCode: "200", message: "Wrong Origin" });
-  }
 
-  next();
-});
+// const allowedOrigins = ["https://edulottmm.com"];
+// app.use((req, res, next) => {
+//   const origin = req.headers.origin;
+//   if (!origin) {
+//     return res
+//       .status(200)
+//       .json({ returnCode: "200", message: "Origin required" });
+//   }
+//   if (!allowedOrigins.includes(origin)) {
+//     return res.status(200).json({ returnCode: "200", message: "Wrong Origin" });
+//   }
+//   next();
+// });
 ////
 
 app.use(bodyParser.json());
