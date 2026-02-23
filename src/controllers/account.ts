@@ -3,6 +3,7 @@ import type { AccountService } from "../services/account";
 import { verifyJwt } from "../utils/jwt";
 import { ReturnCode, ReturnMessage } from "../types/response";
 import type { TAccount } from "../types/account";
+import { apiKeyGuard } from "../utils/common";
 
 export class AccountController {
   constructor(private accountService: AccountService) {}
@@ -50,15 +51,9 @@ export class AccountController {
 
     router.post(
       "/getaccounts",
-      verifyJwt,
+      apiKeyGuard,
       async (req: Request, res: Response) => {
         try {
-          if (!req.user) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: ReturnMessage.UNAUTHORIZED,
-            });
-          }
           const result = await this.accountService.getAccounts(req.body);
           return res.json({
             returncode: ReturnCode.SUCCESS,

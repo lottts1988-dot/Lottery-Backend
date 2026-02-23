@@ -73,7 +73,7 @@ export class TicketRepo {
       date: currentMonth,
       ...(alphabet && { alphabet }),
       ...(number && {
-        name: {
+        number: {
           contains: number,
         },
       }),
