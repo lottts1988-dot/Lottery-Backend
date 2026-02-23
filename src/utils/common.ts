@@ -6,7 +6,7 @@ import type { Request, Response, NextFunction } from "express";
 
 export function apiKeyGuard(req: Request, res: Response, next: NextFunction) {
   const key = req.header("x-api-key") || "";
-  const validKey = Bun.env.X_API_KEY || "";
+  const validKey = process.env.X_API_KEY || "";
 
   const isValid =
     key.length === validKey.length &&

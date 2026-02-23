@@ -1,10 +1,10 @@
 import { S3Client } from "@aws-sdk/client-s3";
 
 export const spacesClient = new S3Client({
-  region: Bun.env.DO_SPACES_REGION,
-  endpoint: Bun.env.DO_SPACES_ENDPOINT,
+  region: process.env.DO_SPACES_REGION,
+  endpoint: process.env.DO_SPACES_ENDPOINT,
   credentials: {
-    accessKeyId: Bun.env.DO_SPACES_KEY!,
-    secretAccessKey: Bun.env.DO_SPACES_SECRET!,
+    accessKeyId: process.env.DO_SPACES_KEY!,
+    secretAccessKey: process.env.DO_SPACES_SECRET!,
   },
 });

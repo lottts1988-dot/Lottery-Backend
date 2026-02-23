@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from "express";
 import { ReturnCode, ReturnMessage } from "../types/response";
 import type { UserJwtPayload } from "../types/jwt";
 
-const JWT_SECRET = Bun.env.JWT_SECRET || "MY_SUPER_SECRET";
+const JWT_SECRET = process.env.JWT_SECRET || "MY_SUPER_SECRET";
 const JWT_EXPIRES_IN = "1d";
 
 export function generateToken(payload: UserJwtPayload) {

@@ -5,7 +5,7 @@ import { prisma } from "../utils/prisma";
 
 export class UploadRepo {
   public async uploadImages(files: Express.Multer.File[]) {
-    const bucket = Bun.env.DO_SPACES_BUCKET!;
+    const bucket = process.env.DO_SPACES_BUCKET!;
     const uploaded = [];
 
     for (const file of files) {
@@ -21,7 +21,7 @@ export class UploadRepo {
         }),
       );
 
-      const url = `${Bun.env.DO_SPACES_ENDPOINT}/${bucket}/${key}`;
+      const url = `${process.env.DO_SPACES_ENDPOINT}/${bucket}/${key}`;
 
       const image = await prisma.image.create({
         data: { url, key },
