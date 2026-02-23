@@ -28,10 +28,13 @@ import { ResultService } from "./services/result";
 import { UploadRepo } from "./repositories/upload";
 import { UploadService } from "./services/upload";
 import { UploadController } from "./controllers/upload";
+import cors from "cors";
 
 const app = express();
 
 //// Security Secure
+
+app.use(cors());
 export const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
@@ -118,7 +121,7 @@ const uploadController = new UploadController(uploadService);
 app.use("/images", uploadController.router());
 
 app.get("/", (_req, res) => {
-  res.status(200).json({ returncode: "200", message: "Lottery API V1.0.1 is working..." });
+  res.status(200).json({ returncode: "200", message: "Lottery API V1.0.2 is working..." });
 });
 
 export default app;
