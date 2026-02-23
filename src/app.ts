@@ -49,7 +49,6 @@ app.use(express.json({ limit: "100kb" }));
 app.use(cors({
   origin: 'http://localhost:4200/',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 
@@ -126,7 +125,7 @@ const uploadController = new UploadController(uploadService);
 app.use("/images", uploadController.router());
 
 app.get("/", (_req, res) => {
-  res.status(200).json({ returncode: "200", message: "Lottery API is working..." });
+  res.status(200).json({ returncode: "200", message: "Lottery API V1.0.1 is working..." });
 });
 
 export default app;
