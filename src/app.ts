@@ -33,7 +33,6 @@ import cors from "cors";
 const app = express();
 
 //// Security Secure
-
 app.use(cors());
 export const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -47,22 +46,6 @@ export const globalLimiter = rateLimit({
   legacyHeaders: false,
 });
 app.use(express.json({ limit: "100kb" }));
-
-// const allowedOrigins = ["https://edulottmm.com"];
-// app.use((req, res, next) => {
-//   const origin = req.headers.origin;
-//   if (!origin) {
-//     return res
-//       .status(200)
-//       .json({ returnCode: "200", message: "Origin required" });
-//   }
-//   if (!allowedOrigins.includes(origin)) {
-//     return res.status(200).json({ returnCode: "200", message: "Wrong Origin" });
-//   }
-//   next();
-// });
-////
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -121,7 +104,9 @@ const uploadController = new UploadController(uploadService);
 app.use("/images", uploadController.router());
 
 app.get("/", (_req, res) => {
-  res.status(200).json({ returncode: "200", message: "Lottery API V1.0.2 is working..." });
+  res
+    .status(200)
+    .json({ returncode: "200", message: "Lottery API V1.0.2 is working..." });
 });
 
 export default app;

@@ -1,5 +1,5 @@
 import { Role } from "../../prisma/generated/prisma/client";
-import { ReturnMessage } from "../types/response";
+import { ReturnCode, ReturnMessage } from "../types/response";
 
 import crypto from "crypto";
 import type { Request, Response, NextFunction } from "express";
@@ -13,7 +13,12 @@ export function apiKeyGuard(req: Request, res: Response, next: NextFunction) {
     crypto.timingSafeEqual(Buffer.from(key), Buffer.from(validKey));
 
   if (!isValid) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res
+      .status(200)
+      .json({
+        returnCode: ReturnCode.FAILED,
+        message: ReturnMessage.UNAUTHORIZED,
+      });
   }
 
   next();
