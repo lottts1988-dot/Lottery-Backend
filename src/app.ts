@@ -127,7 +127,7 @@ const uploadController = new UploadController(uploadService);
 app.use("/images", uploadController.router());
 
 app.get("/", (_req, res) => {
-  res.status(200).json({ returncode: "200", message: "API is working..." });
+  res.status(200).json({ returncode: "200", message: "Lottery API is working..." });
 });
 
 export default app;
