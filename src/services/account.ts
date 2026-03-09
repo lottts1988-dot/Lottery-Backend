@@ -5,6 +5,7 @@ import type {
   GetAccount,
   AccountFilter,
   GetAccountByAdmin,
+  AccountFilterForAdmin,
 } from "../types/account";
 
 export class AccountService {
@@ -34,7 +35,7 @@ export class AccountService {
   public async getAccountsByAdmin(data: GetAccountByAdmin) {
     const { page = 1, limit = 20 } = data;
 
-    const filters: AccountFilter = data;
+    const filters: AccountFilterForAdmin = data;
 
     const accounts = await this.accountRepo.getAccountsByAdmin(
       Number(page),

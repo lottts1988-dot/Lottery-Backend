@@ -14,9 +14,7 @@ export interface GetAccount {
 export interface GetAccountByAdmin {
   page?: number;
   limit?: number;
-  name?: string;
-  phone?: string;
-  card?: string;
+  search?: string;
 }
 
 export interface AccountFilter {
@@ -25,7 +23,5 @@ export interface AccountFilter {
 }
 
 export interface AccountFilterForAdmin {
-  name?: string;
-  phone?: string;
-  card?: string;
+  search?: string;
 }

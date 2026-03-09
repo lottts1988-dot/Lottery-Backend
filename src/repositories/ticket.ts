@@ -95,18 +95,16 @@ export class TicketRepo {
     perPage: number,
     filters: TicketFilter,
   ) {
-    const { date, alphabet, number, status } = filters;
+    const { date, search, status } = filters;
 
     const where: Prisma.TicketWhereInput = {
       isDeleted: false,
       status: status,
       date: date,
-      ...(alphabet && { alphabet }),
-      ...(number && {
-        name: {
-          contains: number,
-        },
-      }),
+      OR: [
+        { alphabet: { contains: search, mode: "insensitive" } },
+        { number: { contains: search, mode: "insensitive" } },
+      ],
     };
 
     const query: Prisma.TicketFindManyArgs = { where };

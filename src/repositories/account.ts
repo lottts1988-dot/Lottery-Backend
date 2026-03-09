@@ -63,22 +63,20 @@ export class AccountRepo {
     perPage: number,
     filters: AccountFilterForAdmin,
   ) {
-    const { name, phone, card } = filters;
+    const { search } = filters;
 
     const where: Prisma.AccountWhereInput = {
       isDeleted: false,
-      ...(name && {
-        name: {
-          contains: name,
-          mode: "insensitive",
+      OR: [
+        { name: { contains: search, mode: "insensitive" } },
+        { phone: { contains: search, mode: "insensitive" } },
+        {
+          card: {
+            isDeleted: false,
+            name: { contains: search, mode: "insensitive" },
+          },
         },
-      }),
-      ...(phone && {
-        phone: {
-          contains: phone,
-        },
-      }),
-      cardid: card,
+      ],
     };
 
     const query: Prisma.AccountFindManyArgs = { where };
