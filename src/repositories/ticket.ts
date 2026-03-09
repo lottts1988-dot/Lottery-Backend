@@ -101,10 +101,13 @@ export class TicketRepo {
       isDeleted: false,
       status: status,
       date: date,
-      OR: [
-        { alphabet: { contains: search, mode: "insensitive" } },
-        { number: { contains: search, mode: "insensitive" } },
-      ],
+      ...(search &&
+        search.trim() !== "" && {
+          OR: [
+            { alphabet: { contains: search, mode: "insensitive" } },
+            { number: { contains: search, mode: "insensitive" } },
+          ],
+        }),
     };
 
     const query: Prisma.TicketFindManyArgs = { where };
