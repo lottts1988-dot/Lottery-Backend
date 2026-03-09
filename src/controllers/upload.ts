@@ -3,6 +3,7 @@ import type { UploadService } from "../services/upload";
 import { upload } from "../utils/upload";
 import { verifyJwt } from "../utils/jwt";
 import { ReturnCode, ReturnMessage } from "../types/response";
+import { apiKeyGuard } from "../utils/common";
 
 export class UploadController {
   constructor(private uploadService: UploadService) {}
@@ -11,7 +12,7 @@ export class UploadController {
     const router = Router();
 
     router.post(
-      "/uploads",
+      "/admin/uploads",
       verifyJwt,
       upload.array("images", 10),
       async (req: Request, res: Response) => {
@@ -25,7 +26,59 @@ export class UploadController {
 
           const files = req.files as Express.Multer.File[];
 
-          console.log(files);
+          if (!req.query.folder) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: "Folder is required!",
+            });
+          }
+          const folder = req.query.folder;
+
+          if (typeof folder !== "string") {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: "Invalid folder parameter",
+            });
+          }
+
+          if (!files?.length) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: "No files uploaded",
+            });
+          }
+
+          const result = await this.uploadService.uploadAdminImages(
+            files,
+            folder,
+          );
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
+    router.post(
+      "/uploads",
+      apiKeyGuard,
+      upload.array("images", 10),
+      async (req: Request, res: Response) => {
+        try {
+          const files = req.files as Express.Multer.File[];
 
           if (!files?.length) {
             return res.json({

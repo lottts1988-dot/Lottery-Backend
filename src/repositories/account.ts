@@ -54,6 +54,7 @@ export class AccountRepo {
       { updatedAt: "desc" },
     );
   }
+  
 
   public async updateAccount(id: string, data: TAccount) {
     const { name, phone, cardid } = data;

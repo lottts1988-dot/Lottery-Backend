@@ -11,8 +11,8 @@ export class OrderRepo {
       isDeleted: false,
       status,
       createdAt: {
-        ...(startdate && { gte: startdate }),
-        ...(enddate && { lte: enddate }),
+        ...(startdate && { gte: new Date(`${startdate}T00:00:00.000Z`) }),
+        ...(enddate && { lte: new Date(`${enddate}T23:59:59.999Z`) }),
       },
     };
 
