@@ -1,6 +1,11 @@
 import type { AccountRepo } from "../repositories/account";
 import type { UserJwtPayload } from "../types/jwt";
-import type { TAccount, GetAccount, AccountFilter } from "../types/account";
+import type {
+  TAccount,
+  GetAccount,
+  AccountFilter,
+  GetAccountByAdmin,
+} from "../types/account";
 
 export class AccountService {
   constructor(private accountRepo: AccountRepo) {
@@ -18,6 +23,20 @@ export class AccountService {
     const filters: AccountFilter = data;
 
     const accounts = await this.accountRepo.getAccounts(
+      Number(page),
+      Number(limit),
+      filters,
+    );
+
+    return accounts;
+  }
+
+  public async getAccountsByAdmin(data: GetAccountByAdmin) {
+    const { page = 1, limit = 20 } = data;
+
+    const filters: AccountFilter = data;
+
+    const accounts = await this.accountRepo.getAccountsByAdmin(
       Number(page),
       Number(limit),
       filters,

@@ -1,6 +1,10 @@
 import { Prisma, type Account } from "../../prisma/generated/prisma/client";
 import type { UserJwtPayload } from "../types/jwt";
-import type { TAccount, AccountFilter } from "../types/account";
+import type {
+  TAccount,
+  AccountFilter,
+  AccountFilterForAdmin,
+} from "../types/account";
 import { paginate } from "../utils/paginate";
 import { prisma } from "../utils/prisma";
 
@@ -54,7 +58,39 @@ export class AccountRepo {
       { updatedAt: "desc" },
     );
   }
-  
+  public async getAccountsByAdmin(
+    page: number,
+    perPage: number,
+    filters: AccountFilterForAdmin,
+  ) {
+    const { name, phone, card } = filters;
+
+    const where: Prisma.AccountWhereInput = {
+      isDeleted: false,
+      ...(name && {
+        name: {
+          contains: name,
+          mode: "insensitive",
+        },
+      }),
+      ...(phone && {
+        phone: {
+          contains: phone,
+        },
+      }),
+      cardid: card,
+    };
+
+    const query: Prisma.AccountFindManyArgs = { where };
+
+    return paginate<Account, Prisma.AccountFindManyArgs>(
+      prisma.account,
+      query,
+      { page, perPage },
+      { card: true },
+      { updatedAt: "desc" },
+    );
+  }
 
   public async updateAccount(id: string, data: TAccount) {
     const { name, phone, cardid } = data;

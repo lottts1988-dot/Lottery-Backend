@@ -73,6 +73,32 @@ export class CardController {
     );
 
     router.post(
+      "/getcardsbyadmin",
+      verifyJwt,
+      async (req: Request, res: Response) => {
+        try {
+          const result = await this.cardService.getCards(req.body);
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
+    router.post(
       "/updatecard",
       verifyJwt,
       async (req: Request, res: Response) => {
