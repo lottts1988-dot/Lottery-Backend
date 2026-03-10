@@ -34,7 +34,7 @@ export class PaymentRepo {
       },
     });
     const invoiceno = "INV" + generateInvoice();
-    const webURL = `http://localhost:3000/${invoiceno}`;
+    const webURL = `https://edulott.vercel.app/${invoiceno}`;
 
     const qrcode = Buffer.from(webURL, "utf-8").toString("base64");
     const result = await prisma.order.create({

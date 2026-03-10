@@ -106,7 +106,7 @@ app.use("/images", uploadController.router());
 app.get("/", (_req, res) => {
   res
     .status(200)
-    .json({ returncode: "200", message: "Lottery API V1.0.6 is working..." });
+    .json({ returncode: "200", message: "Lottery API V1.0.7 is working..." });
 });
 
 export default app;
