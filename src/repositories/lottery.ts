@@ -58,6 +58,17 @@ export class LotteryRepo {
     );
   }
 
+  public async getSelectLottery() {
+    const result = await prisma.lottery.findFirst({
+      where: {
+        isDeleted: false,
+        isSelect: true,
+      },
+    });
+
+    return result;
+  }
+
   public async updateLottery(id: string, data: TLottery) {
     const { logo, title, desc, org, terms, price } = data;
 

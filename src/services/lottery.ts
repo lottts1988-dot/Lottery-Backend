@@ -26,11 +26,17 @@ export class LotteryService {
     return lotterys;
   }
 
+  public async getSelectLottery() {
+    const lottery = await this.lotteryRepo.getSelectLottery();
+
+    return lottery;
+  }
+
   public async updateLottery(id: string, data: TLottery) {
     return this.lotteryRepo.updateLottery(id, data);
   }
 
-    public async updateLotterySelect(id: string) {
+  public async updateLotterySelect(id: string) {
     return this.lotteryRepo.updateLotterySelect(id);
   }
 
