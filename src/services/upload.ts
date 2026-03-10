@@ -5,13 +5,13 @@ export class UploadService {
     this.uploadRepo = uploadRepo;
   }
 
-  public async uploadAdminImages(files: Express.Multer.File[], folder: string) {
-    const uploadImages = await this.uploadRepo.uploadAdminImages(files, folder);
+  public async uploadAdminImages(file: Express.Multer.File, folder: string) {
+    const uploadImages = await this.uploadRepo.uploadAdminImages(file, folder);
     return uploadImages;
   }
 
-  public async uploadImages(files: Express.Multer.File[]) {
-    const uploadImages = await this.uploadRepo.uploadImages(files);
+  public async uploadImages(file: Express.Multer.File) {
+    const uploadImages = await this.uploadRepo.uploadImages(file);
     return uploadImages;
   }
 }

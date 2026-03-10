@@ -14,7 +14,7 @@ export class UploadController {
     router.post(
       "/admin/uploads",
       verifyJwt,
-      upload.array("images", 10),
+      upload.single("image"),
       async (req: Request, res: Response) => {
         try {
           if (!req.user) {
@@ -23,8 +23,6 @@ export class UploadController {
               message: ReturnMessage.UNAUTHORIZED,
             });
           }
-
-          const files = req.files as Express.Multer.File[];
 
           if (!req.query.folder) {
             return res.json({
@@ -41,15 +39,16 @@ export class UploadController {
             });
           }
 
-          if (!files?.length) {
+          const file = req.file;
+          if (!file) {
             return res.json({
               returncode: ReturnCode.FAILED,
-              message: "No files uploaded",
+              message: "No file uploaded",
             });
           }
 
           const result = await this.uploadService.uploadAdminImages(
-            files,
+            file,
             folder,
           );
           return res.json({
@@ -75,19 +74,19 @@ export class UploadController {
     router.post(
       "/uploads",
       apiKeyGuard,
-      upload.array("images", 10),
+      upload.single("image"),
       async (req: Request, res: Response) => {
         try {
-          const files = req.files as Express.Multer.File[];
+          const file = req.file;
 
-          if (!files?.length) {
+          if (!file) {
             return res.json({
               returncode: ReturnCode.FAILED,
               message: "No files uploaded",
             });
           }
 
-          const result = await this.uploadService.uploadImages(files);
+          const result = await this.uploadService.uploadImages(file);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,
