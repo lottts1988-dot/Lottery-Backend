@@ -5,11 +5,44 @@ import { prisma } from "../utils/prisma";
 
 export class OrderRepo {
   public async getOrders(page: number, perPage: number, filters: OrderFilter) {
-    const { startdate, enddate, status } = filters;
+    const { startdate, enddate, status, search } = filters;
 
     const where: Prisma.OrderWhereInput = {
       isDeleted: false,
-      status,
+      ...(status && {
+        status: status,
+      }),
+      ...(search &&
+        search.trim() !== "" && {
+          OR: [
+            { invoiceno: { contains: search, mode: "insensitive" } },
+            {
+              payment: {
+                isDeleted: false,
+                OR: [
+                  {
+                    name: {
+                      contains: search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
+                  {
+                    address: {
+                      contains: search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
+                  {
+                    phone: {
+                      contains: search,
+                      mode: Prisma.QueryMode.insensitive,
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        }),
       createdAt: {
         ...(startdate && { gte: new Date(`${startdate}T00:00:00.000Z`) }),
         ...(enddate && { lte: new Date(`${enddate}T23:59:59.999Z`) }),
@@ -22,7 +55,14 @@ export class OrderRepo {
       prisma.order,
       query,
       { page, perPage },
-      {},
+      {
+        payment: {
+          include: {
+            ticket: true,
+          },
+        },
+        lottery: true,
+      },
       { createdAt: "desc" },
     );
   }

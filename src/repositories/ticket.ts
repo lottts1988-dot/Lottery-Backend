@@ -99,7 +99,9 @@ export class TicketRepo {
 
     const where: Prisma.TicketWhereInput = {
       isDeleted: false,
-      status: status,
+      ...(status && {
+        status: status,
+      }),
       date: date,
       ...(search &&
         search.trim() !== "" && {
