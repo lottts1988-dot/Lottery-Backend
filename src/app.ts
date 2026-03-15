@@ -29,6 +29,7 @@ import { UploadRepo } from "./repositories/upload";
 import { UploadService } from "./services/upload";
 import { UploadController } from "./controllers/upload";
 import cors from "cors";
+import { GeneratePDFController } from "./controllers/generate-pdf";
 
 const app = express();
 
@@ -102,6 +103,10 @@ const uploadService = new UploadService(uploadRepo);
 const uploadController = new UploadController(uploadService);
 
 app.use("/images", uploadController.router());
+
+const generatePDFController = new GeneratePDFController();
+
+app.use("/pdf", generatePDFController.router());
 
 app.get("/", (_req, res) => {
   res

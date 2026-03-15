@@ -109,13 +109,10 @@ model Account {
 
 model Lottery {
   id            String   @id @default(uuid())
-  logo          String
-  title         String
-  desc          String
-  org           Json[]
-  terms         String
+  date          String
+  image         String
   price         String
-  isSelect      Boolean
+
   t1            String?
   t2            String?
   t3            String?
@@ -155,7 +152,6 @@ model Payment {
 model Order {
   id            String   @id @default(uuid())
   invoiceno     String   @unique
-  qrcode        String
   status        String
 
   paymentid     String

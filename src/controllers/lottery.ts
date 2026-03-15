@@ -1,9 +1,275 @@
+// import { Router, type Request, type Response } from "express";
+// import type { LotteryService } from "../services/lottery";
+// import { verifyJwt } from "../utils/jwt";
+// import { ReturnCode, ReturnMessage } from "../types/response";
+// import type { TLottery } from "../types/lottery";
+// import { apiKeyGuard } from "../utils/common";
+
+// export class LotteryController {
+//   constructor(private lotteryService: LotteryService) {}
+
+//   router(): Router {
+//     const router = Router();
+
+//     router.post(
+//       "/createlottery",
+//       verifyJwt,
+//       async (req: Request, res: Response) => {
+//         try {
+//           if (!req.user) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: ReturnMessage.UNAUTHORIZED,
+//             });
+//           }
+
+//           const data: TLottery = req.body;
+
+//           const result = await this.lotteryService.createLottery(
+//             data,
+//             req.user,
+//           );
+//           return res.json({
+//             returncode: ReturnCode.SUCCESS,
+//             message: ReturnMessage.SUCCESS,
+//             data: result,
+//           });
+//         } catch (e: unknown) {
+//           if (e instanceof Error) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: e.message,
+//             });
+//           }
+//           return res.json({
+//             returncode: ReturnCode.FAILED,
+//             message: ReturnMessage.FAILED,
+//           });
+//         }
+//       },
+//     );
+
+//     router.post(
+//       "/getlotteries",
+//       verifyJwt,
+//       async (req: Request, res: Response) => {
+//         try {
+//           if (!req.user) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: ReturnMessage.UNAUTHORIZED,
+//             });
+//           }
+//           const result = await this.lotteryService.getLotteries(req.body);
+//           return res.json({
+//             returncode: ReturnCode.SUCCESS,
+//             message: ReturnMessage.SUCCESS,
+//             data: result,
+//           });
+//         } catch (e: unknown) {
+//           if (e instanceof Error) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: e.message,
+//             });
+//           }
+//           return res.json({
+//             returncode: ReturnCode.FAILED,
+//             message: ReturnMessage.FAILED,
+//           });
+//         }
+//       },
+//     );
+
+//     router.post(
+//       "/getselectlottery",
+//       apiKeyGuard,
+//       async (req: Request, res: Response) => {
+//         try {
+//           const result = await this.lotteryService.getSelectLottery();
+//           return res.json({
+//             returncode: ReturnCode.SUCCESS,
+//             message: ReturnMessage.SUCCESS,
+//             data: result,
+//           });
+//         } catch (e: unknown) {
+//           if (e instanceof Error) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: e.message,
+//             });
+//           }
+//           return res.json({
+//             returncode: ReturnCode.FAILED,
+//             message: ReturnMessage.FAILED,
+//           });
+//         }
+//       },
+//     );
+
+//     router.post(
+//       "/getselectlotterybyadmin",
+//       verifyJwt,
+//       async (req: Request, res: Response) => {
+//         try {
+//           if (!req.user) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: ReturnMessage.UNAUTHORIZED,
+//             });
+//           }
+//           const result = await this.lotteryService.getSelectLottery();
+//           return res.json({
+//             returncode: ReturnCode.SUCCESS,
+//             message: ReturnMessage.SUCCESS,
+//             data: result,
+//           });
+//         } catch (e: unknown) {
+//           if (e instanceof Error) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: e.message,
+//             });
+//           }
+//           return res.json({
+//             returncode: ReturnCode.FAILED,
+//             message: ReturnMessage.FAILED,
+//           });
+//         }
+//       },
+//     );
+
+//     router.post(
+//       "/updatelottery",
+//       verifyJwt,
+//       async (req: Request, res: Response) => {
+//         try {
+//           if (!req.user) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: ReturnMessage.UNAUTHORIZED,
+//             });
+//           }
+//           const id: string = req.body.id;
+//           if (!id) {
+//             return res.json({
+//               ReturnCode: ReturnCode.FAILED,
+//               message: ReturnMessage.IDREQUIRED,
+//             });
+//           }
+
+//           const data: TLottery = req.body;
+
+//           const result = await this.lotteryService.updateLottery(id, data);
+//           return res.json({
+//             returncode: ReturnCode.SUCCESS,
+//             message: ReturnMessage.SUCCESS,
+//             data: result,
+//           });
+//         } catch (e: unknown) {
+//           if (e instanceof Error) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: e.message,
+//             });
+//           }
+//           return res.json({
+//             returncode: ReturnCode.FAILED,
+//             message: ReturnMessage.FAILED,
+//           });
+//         }
+//       },
+//     );
+
+//     router.post(
+//       "/updatelotteryselect",
+//       verifyJwt,
+//       async (req: Request, res: Response) => {
+//         try {
+//           if (!req.user) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: ReturnMessage.UNAUTHORIZED,
+//             });
+//           }
+//           const id: string = req.body.id;
+//           if (!id) {
+//             return res.json({
+//               ReturnCode: ReturnCode.FAILED,
+//               message: ReturnMessage.IDREQUIRED,
+//             });
+//           }
+//           const result = await this.lotteryService.updateLotterySelect(id);
+//           return res.json({
+//             returncode: ReturnCode.SUCCESS,
+//             message: ReturnMessage.SUCCESS,
+//             data: result,
+//           });
+//         } catch (e: unknown) {
+//           if (e instanceof Error) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: e.message,
+//             });
+//           }
+//           return res.json({
+//             returncode: ReturnCode.FAILED,
+//             message: ReturnMessage.FAILED,
+//           });
+//         }
+//       },
+//     );
+
+//     router.post(
+//       "/deletelottery",
+//       verifyJwt,
+//       async (req: Request, res: Response) => {
+//         try {
+//           if (!req.user) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: ReturnMessage.UNAUTHORIZED,
+//             });
+//           }
+//           const id: string = req.body.id;
+//           if (!id) {
+//             return res.json({
+//               ReturnCode: ReturnCode.FAILED,
+//               message: ReturnMessage.IDREQUIRED,
+//             });
+//           }
+//           const result = await this.lotteryService.deleteLottery(id);
+//           return res.json({
+//             returncode: ReturnCode.SUCCESS,
+//             message: ReturnMessage.SUCCESS,
+//             data: result,
+//           });
+//         } catch (e: unknown) {
+//           if (e instanceof Error) {
+//             return res.json({
+//               returncode: ReturnCode.FAILED,
+//               message: e.message,
+//             });
+//           }
+//           return res.json({
+//             returncode: ReturnCode.FAILED,
+//             message: ReturnMessage.FAILED,
+//           });
+//         }
+//       },
+//     );
+
+//     return router;
+//   }
+// }
+
 import { Router, type Request, type Response } from "express";
 import type { LotteryService } from "../services/lottery";
 import { verifyJwt } from "../utils/jwt";
 import { ReturnCode, ReturnMessage } from "../types/response";
 import type { TLottery } from "../types/lottery";
-import { apiKeyGuard } from "../utils/common";
+import { prisma } from "../utils/prisma";
+import { apiKeyGuard, getCurrentMonthString } from "../utils/common";
 
 export class LotteryController {
   constructor(private lotteryService: LotteryService) {}
@@ -22,13 +288,25 @@ export class LotteryController {
               message: ReturnMessage.UNAUTHORIZED,
             });
           }
+          const date = getCurrentMonthString();
+
+          const isAlreadyHaveOne = await prisma.lottery.findFirst({
+            where: {
+              isDeleted: false,
+              date,
+            },
+          });
+
+          if (isAlreadyHaveOne) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: "This month lottery already created!",
+            });
+          }
 
           const data: TLottery = req.body;
 
-          const result = await this.lotteryService.createLottery(
-            data,
-            req.user,
-          );
+          const result = await this.lotteryService.createLottery(data, req.user);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,
@@ -50,75 +328,11 @@ export class LotteryController {
     );
 
     router.post(
-      "/getlotteries",
-      verifyJwt,
-      async (req: Request, res: Response) => {
-        try {
-          if (!req.user) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: ReturnMessage.UNAUTHORIZED,
-            });
-          }
-          const result = await this.lotteryService.getLotteries(req.body);
-          return res.json({
-            returncode: ReturnCode.SUCCESS,
-            message: ReturnMessage.SUCCESS,
-            data: result,
-          });
-        } catch (e: unknown) {
-          if (e instanceof Error) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: e.message,
-            });
-          }
-          return res.json({
-            returncode: ReturnCode.FAILED,
-            message: ReturnMessage.FAILED,
-          });
-        }
-      },
-    );
-
-    router.post(
-      "/getselectlottery",
+      "/getcurrentmonthlottery",
       apiKeyGuard,
       async (req: Request, res: Response) => {
         try {
-          const result = await this.lotteryService.getSelectLottery();
-          return res.json({
-            returncode: ReturnCode.SUCCESS,
-            message: ReturnMessage.SUCCESS,
-            data: result,
-          });
-        } catch (e: unknown) {
-          if (e instanceof Error) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: e.message,
-            });
-          }
-          return res.json({
-            returncode: ReturnCode.FAILED,
-            message: ReturnMessage.FAILED,
-          });
-        }
-      },
-    );
-
-    router.post(
-      "/getselectlotterybyadmin",
-      verifyJwt,
-      async (req: Request, res: Response) => {
-        try {
-          if (!req.user) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: ReturnMessage.UNAUTHORIZED,
-            });
-          }
-          const result = await this.lotteryService.getSelectLottery();
+          const result = await this.lotteryService.getCurrentMonthLottery();
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,
@@ -161,45 +375,6 @@ export class LotteryController {
           const data: TLottery = req.body;
 
           const result = await this.lotteryService.updateLottery(id, data);
-          return res.json({
-            returncode: ReturnCode.SUCCESS,
-            message: ReturnMessage.SUCCESS,
-            data: result,
-          });
-        } catch (e: unknown) {
-          if (e instanceof Error) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: e.message,
-            });
-          }
-          return res.json({
-            returncode: ReturnCode.FAILED,
-            message: ReturnMessage.FAILED,
-          });
-        }
-      },
-    );
-
-    router.post(
-      "/updatelotteryselect",
-      verifyJwt,
-      async (req: Request, res: Response) => {
-        try {
-          if (!req.user) {
-            return res.json({
-              returncode: ReturnCode.FAILED,
-              message: ReturnMessage.UNAUTHORIZED,
-            });
-          }
-          const id: string = req.body.id;
-          if (!id) {
-            return res.json({
-              ReturnCode: ReturnCode.FAILED,
-              message: ReturnMessage.IDREQUIRED,
-            });
-          }
-          const result = await this.lotteryService.updateLotterySelect(id);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,

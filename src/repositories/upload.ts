@@ -30,7 +30,7 @@ export class UploadRepo {
   public async uploadImages(file: Express.Multer.File) {
     const bucket = process.env.DO_SPACES_BUCKET!;
 
-    const key = `uploads/lottery/user/${file.originalname}-${uuid()}`;
+    const key = `uploads/lottery/user/${uuid()}-${file.originalname}`;
 
     await spacesClient.send(
       new PutObjectCommand({

@@ -153,13 +153,9 @@ export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeo
 
 export const LotteryScalarFieldEnum = {
   id: 'id',
-  logo: 'logo',
-  title: 'title',
-  desc: 'desc',
-  org: 'org',
-  terms: 'terms',
+  date: 'date',
+  image: 'image',
   price: 'price',
-  isSelect: 'isSelect',
   t1: 't1',
   t2: 't2',
   t3: 't3',
@@ -197,7 +193,6 @@ export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeo
 export const OrderScalarFieldEnum = {
   id: 'id',
   invoiceno: 'invoiceno',
-  qrcode: 'qrcode',
   status: 'status',
   paymentid: 'paymentid',
   lotteryid: 'lotteryid',

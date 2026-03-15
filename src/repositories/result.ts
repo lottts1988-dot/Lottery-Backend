@@ -3,8 +3,6 @@ import type { TResult } from "../types/result";
 import { getCurrentMonthString } from "../utils/common";
 import { prisma } from "../utils/prisma";
 
-    // "build": "bun build src/server.ts --outdir dist --target node --format cjs --minify",
-
 export class ResultRepo {
   public async createResult(data: TResult, reqUser: UserJwtPayload) {
     const { image } = data;
