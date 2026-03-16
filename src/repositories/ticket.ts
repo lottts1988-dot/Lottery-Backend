@@ -41,21 +41,42 @@ export class TicketRepo {
     const userid = reqUser.id;
 
     const time = await getTime();
-    return prisma.$transaction(
-      data.map((item) =>
-        prisma.ticket.create({
-          data: {
-            userid,
-            alphabet: item.alphabet,
-            number: item.number,
-            time,
-            date,
-            annoucedate: `${nextmonth}-01`,
-            status: "01",
-          },
-        }),
-      ),
-    );
+    const batchSize = 20;
+
+    for (let i = 0; i < data.length; i += batchSize) {
+      const batch = data.slice(i, i + batchSize);
+
+      await Promise.all(
+        batch.map((ticket) =>
+          prisma.ticket.create({
+            data: {
+              userid,
+              alphabet: ticket.alphabet,
+              number: ticket.number,
+              time,
+              date,
+              annoucedate: `${nextmonth}-01`,
+              status: "01",
+            },
+          }),
+        ),
+      );
+    }
+    // return prisma.$transaction(
+    //   data.map((item) =>
+    //     prisma.ticket.create({
+    //       data: {
+    //         userid,
+    //         alphabet: item.alphabet,
+    //         number: item.number,
+    //         time,
+    //         date,
+    //         annoucedate: `${nextmonth}-01`,
+    //         status: "01",
+    //       },
+    //     }),
+    //   ),
+    // );
   }
 
   public async getCurrentMonthTicket(
@@ -100,9 +121,11 @@ export class TicketRepo {
     const where: Prisma.TicketWhereInput = {
       isDeleted: false,
       ...(status && {
-        status: status,
+        status,
       }),
-      date: date,
+      ...(date && {
+        date,
+      }),
       ...(search &&
         search.trim() !== "" && {
           OR: [

@@ -278,6 +278,32 @@ export class LotteryController {
     const router = Router();
 
     router.post(
+      "/getlotteries",
+      verifyJwt,
+      async (req: Request, res: Response) => {
+        try {
+          const result = await this.lotteryService.getlotteries(req.body);
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
+    router.post(
       "/createlottery",
       verifyJwt,
       async (req: Request, res: Response) => {
@@ -306,7 +332,10 @@ export class LotteryController {
 
           const data: TLottery = req.body;
 
-          const result = await this.lotteryService.createLottery(data, req.user);
+          const result = await this.lotteryService.createLottery(
+            data,
+            req.user,
+          );
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,

@@ -28,3 +28,15 @@ export interface TLottery {
   image: string;
   price: string;
 }
+
+export interface GetLotteries {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+
+export interface Filter {
+  search?: string;
+}
+

@@ -47,7 +47,7 @@
 
 import type { LotteryRepo } from "../repositories/lottery";
 import type { UserJwtPayload } from "../types/jwt";
-import type { TLottery } from "../types/lottery";
+import type { Filter, GetLotteries, TLottery } from "../types/lottery";
 
 export class LotteryService {
   constructor(private lotteryRepo: LotteryRepo) {
@@ -59,8 +59,23 @@ export class LotteryService {
     return createlottery;
   }
 
+  public async getlotteries(data: GetLotteries) {
+    const { page = 1, limit = 20 } = data;
+
+    const filters: Filter = data;
+
+    const accounts = await this.lotteryRepo.getlotteries(
+      Number(page),
+      Number(limit),
+      filters,
+    );
+
+    return accounts;
+  }
+  
   public async getCurrentMonthLottery() {
-    const getCurrentMonthLottery = await this.lotteryRepo.getCurrentMonthLottery();
+    const getCurrentMonthLottery =
+      await this.lotteryRepo.getCurrentMonthLottery();
     return getCurrentMonthLottery;
   }
 
@@ -72,4 +87,3 @@ export class LotteryService {
     return this.lotteryRepo.deleteLottery(id);
   }
 }
-

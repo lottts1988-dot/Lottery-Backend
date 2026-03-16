@@ -58,6 +58,7 @@ export class AccountRepo {
       { updatedAt: "desc" },
     );
   }
+  
   public async getAccountsByAdmin(
     page: number,
     perPage: number,

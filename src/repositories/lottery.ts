@@ -111,9 +111,11 @@
 //   }
 // }
 
+import type { Lottery, Prisma } from "../../prisma/generated/prisma/client";
 import type { UserJwtPayload } from "../types/jwt";
-import type { TLottery } from "../types/lottery";
+import type { Filter, TLottery } from "../types/lottery";
 import { getCurrentMonthString } from "../utils/common";
+import { paginate } from "../utils/paginate";
 import { prisma } from "../utils/prisma";
 
 export class LotteryRepo {
@@ -145,6 +147,27 @@ export class LotteryRepo {
     });
     console.log(lottery);
     return lottery;
+  }
+
+  public async getlotteries(page: number, perPage: number, filters: Filter) {
+    const { search } = filters;
+
+    const where: Prisma.LotteryWhereInput = {
+      isDeleted: false,
+      ...(search && {
+        price: search,
+      }),
+    };
+
+    const query: Prisma.LotteryFindManyArgs = { where };
+
+    return paginate<Lottery, Prisma.LotteryFindManyArgs>(
+      prisma.lottery,
+      query,
+      { page, perPage },
+      {},
+      { updatedAt: "desc" },
+    );
   }
 
   public async updateLottery(id: string, data: TLottery) {

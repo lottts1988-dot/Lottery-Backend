@@ -80,6 +80,12 @@ export class AccountController {
       verifyJwt,
       async (req: Request, res: Response) => {
         try {
+          if (!req.user) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: ReturnMessage.UNAUTHORIZED,
+            });
+          }
           const result = await this.accountService.getAccountsByAdmin(req.body);
           return res.json({
             returncode: ReturnCode.SUCCESS,
