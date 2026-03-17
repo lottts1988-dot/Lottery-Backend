@@ -8,7 +8,7 @@
     "db:migrate": "bunx prisma migrate dev",
     "db:studio": "bunx prisma studio",
     "dev": "bun --watch src/server.ts",
-    "prod": "bun build src/server.ts --outdir dist --target node --format esm --minify",
+    "prod": "bun build src/server.ts --outdir dist --target node --format esm --minify --external canvas",
     "seed": "bunx prisma db seed",
     "lint": "eslint .",
     "prepare": "husky"
