@@ -1,15 +1,16 @@
 import type { TPayment } from "../types/payment";
-import { generateInvoice } from "../utils/common";
+import { generateInvoice, getCurrentMonthString } from "../utils/common";
 import { prisma } from "../utils/prisma";
 
 export class PaymentRepo {
   public async createPayment(data: TPayment) {
     const { ticket, name, address, phone, screenshot } = data;
+    const date = getCurrentMonthString();
 
     const lottery = await prisma.lottery.findFirst({
       where: {
         isDeleted: false,
-        isSelect: true,
+        date,
       },
     });
 
@@ -34,13 +35,9 @@ export class PaymentRepo {
       },
     });
     const invoiceno = "INV" + generateInvoice();
-    const webURL = `https://edulott.vercel.app/${invoiceno}`;
-
-    const qrcode = Buffer.from(webURL, "utf-8").toString("base64");
     const result = await prisma.order.create({
       data: {
         invoiceno,
-        qrcode,
         status: "01",
         paymentid: payment.id,
         lotteryid: lottery == null ? "" : lottery.id,

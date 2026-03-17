@@ -1,8 +1,9 @@
 import { Router, type Request, type Response } from "express";
 import { ReturnCode, ReturnMessage } from "../types/response";
-import { apiKeyGuard } from "../utils/common";
+import { apiKeyGuard, getCurrentMonthString } from "../utils/common";
 import { createCanvas, loadImage } from "canvas";
 import PDFDocument from "pdfkit";
+import { prisma } from "../utils/prisma";
 
 interface TicketData {
   alphabet: string;
@@ -19,13 +20,23 @@ export class GeneratePDFController {
       async (req: Request, res: Response) => {
         try {
           const {
-            image: cloudUrl,
             ticket,
             invNo,
-            xPercent = 0.52,
-            yPercent = 0.13,
+            xPercent = 0.65,
+            yPercent = 0.12,
             fontScale = 0.07,
           } = req.body;
+
+          const date = getCurrentMonthString();
+
+          const lottery = await prisma.lottery.findFirst({
+            where: {
+              isDeleted: false,
+              date,
+            },
+          });
+
+          const cloudUrl = lottery?.image;
 
           if (!cloudUrl || !Array.isArray(ticket) || ticket.length === 0) {
             return res.json({

@@ -1,6 +1,6 @@
 import type { ResultRepo } from "../repositories/result";
 import type { UserJwtPayload } from "../types/jwt";
-import type { TResult } from "../types/result";
+import type { GetResults, TResult } from "../types/result";
 
 export class ResultService {
   constructor(private resultRepo: ResultRepo) {
@@ -24,4 +24,16 @@ export class ResultService {
   public async deleteResult(id: string) {
     return this.resultRepo.deleteResult(id);
   }
+
+  public async getresults(data: GetResults) {
+      const { page = 1, limit = 20 } = data;
+  
+  
+      const accounts = await this.resultRepo.getresults(
+        Number(page),
+        Number(limit),
+      );
+  
+      return accounts;
+    }
 }
