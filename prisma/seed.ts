@@ -31,7 +31,11 @@ const userData = [
 
 async function main() {
   console.log(`Start seeding ...`);
-
+  console.log(
+    "DATABASE_URL:",
+    process.env.DATABASE_URL,
+    typeof process.env.DATABASE_URL,
+  );
   await prisma.user.deleteMany();
   const users: user[] = [];
   for (const u of userData) {

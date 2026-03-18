@@ -14,4 +14,9 @@ export class UploadService {
     const uploadImages = await this.uploadRepo.uploadImages(file);
     return uploadImages;
   }
+
+  public async deleteImage(imageURL: string) {
+    const deleteImage = await this.uploadRepo.deleteImage(imageURL);
+    return deleteImage;
+  }
 }

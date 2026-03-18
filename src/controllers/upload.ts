@@ -107,6 +107,81 @@ export class UploadController {
       },
     );
 
+    router.post(
+      "/admin/deleteimage",
+      verifyJwt,
+      async (req: Request, res: Response) => {
+        try {
+          if (!req.user) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: ReturnMessage.UNAUTHORIZED,
+            });
+          }
+
+          const imageURL: string = req.body.imageurl;
+          if (!imageURL) {
+            return res.json({
+              ReturnCode: ReturnCode.FAILED,
+              message: "Image URL is required!",
+            });
+          }
+
+          const result = await this.uploadService.deleteImage(imageURL);
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
+    router.post(
+      "/deleteimage",
+      apiKeyGuard,
+      async (req: Request, res: Response) => {
+        try {
+          const imageURL: string = req.body.imageurl;
+          if (!imageURL) {
+            return res.json({
+              ReturnCode: ReturnCode.FAILED,
+              message: "Image URL is required!",
+            });
+          }
+
+          const result = await this.uploadService.deleteImage(imageURL);
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
     return router;
   }
 }

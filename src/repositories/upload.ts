@@ -1,4 +1,4 @@
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { spacesClient } from "../space";
 import { v4 as uuid } from "uuid";
 import { prisma } from "../utils/prisma";
@@ -50,4 +50,34 @@ export class UploadRepo {
 
     return image;
   }
+
+  public async deleteImage(imageURL: string) {
+    const bucket = process.env.DO_SPACES_BUCKET!;
+    const key = getKeyFromUrl(imageURL);
+
+    await spacesClient.send(
+      new DeleteObjectCommand({
+        Bucket: bucket,
+        Key: key,
+      }),
+    );
+
+    const image = await prisma.image.findFirst({
+      where: {
+        url: imageURL,
+      },
+    });
+
+    await prisma.image.delete({
+      where: { id: image?.id },
+    });
+
+    return image;
+  }
 }
+
+const getKeyFromUrl = (url: string): string => {
+  const parsed = new URL(url);
+
+  return parsed.pathname.substring(1);
+};
