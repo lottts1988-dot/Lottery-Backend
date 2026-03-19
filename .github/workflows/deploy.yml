@@ -1,0 +1,63 @@
+name: Deploy Bun App to DigitalOcean
+
+on:
+  push:
+    branches: [main] # Triggers only when you push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        # This is needed for the build step and type-checking
+        run: bunx prisma generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          # Replace '~/apps/my-app' with your actual folder path on the server
+          script: |
+            cd ~/Lottery-Backend
+
+            # 1. Pull the latest code from GitHub
+            git pull origin main
+
+            # 2. Install production dependencies using Bun
+            # Using absolute path to Bun is safer for SSH sessions
+            ~/.bun/bin/bun install --production
+
+            # 3. Run Prisma Migrations
+            export DATABASE_URL="${{ secrets.DATABASE_URL }}"
+            export PORT="${{ secrets.PORT }}"
+            export JWT_SECRET="${{ secrets.JWT_SECRET }}"
+            export X_API_KEY="${{ secrets.X_API_KEY }}"
+            export DO_SPACES_BUCKET="${{ secrets.DO_SPACES_BUCKET }}"
+            export DO_SPACES_ENDPOINT="${{ secrets.DO_SPACES_ENDPOINT }}"
+            export DO_SPACES_KEY="${{ secrets.DO_SPACES_KEY }}"
+            export DO_SPACES_REGION="${{ secrets.DO_SPACES_REGION }}"
+            export DO_SPACES_SECRET="${{ secrets.DO_SPACES_SECRET }}"
+            ~/.bun/bin/bunx prisma migrate deploy
+
+            # 4. Deploy using PM2 Ecosystem file
+            # 'startOrReload' ensures zero-downtime if the app is already running
+            pm2 startOrReload ecosystem.config.cjs --env production
+
+            # 5. Save PM2 list to ensure it restarts on server reboot
+            pm2 save

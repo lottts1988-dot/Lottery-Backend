@@ -62,17 +62,7 @@ export class UploadRepo {
       }),
     );
 
-    const image = await prisma.image.findFirst({
-      where: {
-        url: imageURL,
-      },
-    });
-
-    await prisma.image.delete({
-      where: { id: image?.id },
-    });
-
-    return image;
+    return {};
   }
 }
 
