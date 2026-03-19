@@ -55,12 +55,5 @@ jobs:
             export DO_SPACES_SECRET="${{ secrets.DO_SPACES_SECRET }}"
             ~/.bun/bin/bunx prisma migrate deploy
 
-            $(which pm2 || echo "/usr/local/bin/pm2") startOrReload ecosystem.config.cjs --env production
-            $(which pm2 || echo "/usr/local/bin/pm2") save
-
-            # # 4. Deploy using PM2 Ecosystem file
-            # # 'startOrReload' ensures zero-downtime if the app is already running
-            # pm2 startOrReload ecosystem.config.cjs --env production
-
-            # # 5. Save PM2 list to ensure it restarts on server reboot
-            # pm2 save
+            pm2 startOrReload ecosystem.config.cjs --env production
+            pm2 save
