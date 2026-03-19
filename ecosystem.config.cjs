@@ -3,6 +3,7 @@ module.exports = {
     {
       name: "edufund",
       script: "bun run dist/server.js",
+      interpreter: "/root/.bun/bin/bun",
       env: {
         NODE_ENV: "production",
         DATABASE_URL:
