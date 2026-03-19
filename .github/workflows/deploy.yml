@@ -1,8 +1,71 @@
+# name: Deploy Bun App to DigitalOcean
+
+# on:
+#   push:
+#     branches: [main] # Triggers only when you push to the main branch
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Setup Bun
+#         uses: oven-sh/setup-bun@v1
+#         with:
+#           bun-version: latest
+
+#       - name: Install dependencies
+#         run: bun install --frozen-lockfile
+
+#       - name: Generate Prisma Client
+#         # This is needed for the build step and type-checking
+#         run: bunx prisma generate
+#         env:
+#           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+#       - name: Deploy via SSH
+#         uses: appleboy/ssh-action@v1.0.3
+#         with:
+#           host: ${{ secrets.SSH_HOST }}
+#           username: ${{ secrets.SSH_USERNAME }}
+#           password: ${{ secrets.SSH_PASSWORD }}
+#           # Replace '~/apps/my-app' with your actual folder path on the server
+#           script: |
+#             cd ~/Lottery-Backend
+
+#             # 1. Pull the latest code from GitHub
+#             git pull origin main
+
+#             # 2. Install production dependencies using Bun
+#             # Using absolute path to Bun is safer for SSH sessions
+#             ~/.bun/bin/bun install --production
+
+#             # 3. Run Prisma Migrations
+#             export DATABASE_URL="${{ secrets.DATABASE_URL }}"
+#             export PORT="${{ secrets.PORT }}"
+#             export JWT_SECRET="${{ secrets.JWT_SECRET }}"
+#             export X_API_KEY="${{ secrets.X_API_KEY }}"
+#             export DO_SPACES_BUCKET="${{ secrets.DO_SPACES_BUCKET }}"
+#             export DO_SPACES_ENDPOINT="${{ secrets.DO_SPACES_ENDPOINT }}"
+#             export DO_SPACES_KEY="${{ secrets.DO_SPACES_KEY }}"
+#             export DO_SPACES_REGION="${{ secrets.DO_SPACES_REGION }}"
+#             export DO_SPACES_SECRET="${{ secrets.DO_SPACES_SECRET }}"
+#             ~/.bun/bin/bunx prisma migrate deploy
+
+#             # 5. Reload using a more common path for PM2
+#             # Change /usr/local/bin/pm2 to whatever 'which pm2' told you
+#             /root/.nvm/versions/node/v20.19.6/bin/pm2 delete edufund || true
+#             /root/.nvm/versions/node/v20.19.6/bin/pm2 start ecosystem.config.cjs --env production
+#             /root/.nvm/versions/node/v20.19.6/bin/pm2 save
+
 name: Deploy Bun App to DigitalOcean
 
 on:
   push:
-    branches: [main] # Triggers only when you push to the main branch
+    branches: [main]
 
 jobs:
   deploy:
@@ -20,8 +83,7 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Generate Prisma Client
-        # This is needed for the build step and type-checking
+      - name: Generate Prisma Client (Local)
         run: bunx prisma generate
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -32,18 +94,20 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          # Replace '~/apps/my-app' with your actual folder path on the server
           script: |
             cd ~/Lottery-Backend
 
-            # 1. Pull the latest code from GitHub
+            # 1. Pull the latest source code
             git pull origin main
 
-            # 2. Install production dependencies using Bun
-            # Using absolute path to Bun is safer for SSH sessions
+            # 2. Install production dependencies
             ~/.bun/bin/bun install --production
 
-            # 3. Run Prisma Migrations
+            # 3. BUILD THE PROJECT
+            # This updates the dist/ folder with your new code
+            ~/.bun/bin/bun run prod
+
+            # 4. Export environment variables for Migrations
             export DATABASE_URL="${{ secrets.DATABASE_URL }}"
             export PORT="${{ secrets.PORT }}"
             export JWT_SECRET="${{ secrets.JWT_SECRET }}"
@@ -53,15 +117,12 @@ jobs:
             export DO_SPACES_KEY="${{ secrets.DO_SPACES_KEY }}"
             export DO_SPACES_REGION="${{ secrets.DO_SPACES_REGION }}"
             export DO_SPACES_SECRET="${{ secrets.DO_SPACES_SECRET }}"
-            ~/.bun/bin/bunx prisma migrate deploy
 
-            # pm2 startOrReload ecosystem.config.cjs --env production
-            # pm2 save
+            # 5. Run Prisma Migrations using the Bun binary
+            ~/.bun/bin/bun prisma migrate deploy
 
-            # 5. Reload using a more common path for PM2
-            # Change /usr/local/bin/pm2 to whatever 'which pm2' told you
-            /root/.nvm/versions/node/v20.19.6/bin/pm2 delete edufund || true
-            /root/.nvm/versions/node/v20.19.6/bin/pm2 start ecosystem.config.cjs --env production
-            /root/.nvm/versions/node/v20.19.6/bin/pm2 save
-            # /root/.nvm/versions/node/v20.19.6/bin/pm2 startOrReload ecosystem.config.cjs --env production
-            # /root/.nvm/versions/node/v20.19.6/bin/pm2 save
+            # 6. Force Restart PM2
+            # We delete and start to ensure the new dist/server.js is loaded
+            /usr/local/bin/pm2 delete edufund || true
+            /usr/local/bin/pm2 start ecosystem.config.cjs --env production
+            /usr/local/bin/pm2 save
