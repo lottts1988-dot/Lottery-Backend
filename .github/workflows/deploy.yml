@@ -124,5 +124,5 @@ jobs:
             # 6. Force Restart PM2
             # We delete and start to ensure the new dist/server.js is loaded
             /root/.nvm/versions/node/v20.19.6/bin/pm2 delete edufund || true
-            /root/.nvm/versions/node/v20.19.6/bin/pm2 start ecosystem.config.cjs --env production
+            /root/.nvm/versions/node/v20.19.6/bin/pm2 start ecosystem.config.cjs
             /root/.nvm/versions/node/v20.19.6/bin/pm2 save
