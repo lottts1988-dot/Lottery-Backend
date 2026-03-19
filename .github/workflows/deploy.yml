@@ -56,7 +56,7 @@
 #             ~/.bun/bin/bunx prisma migrate deploy
 
 #             # 5. Reload using a more common path for PM2
-#             # Change /usr/local/bin/pm2 to whatever 'which pm2' told you
+#             # Change /root/.nvm/versions/node/v20.19.6/bin/pm2 to whatever 'which pm2' told you
 #             /root/.nvm/versions/node/v20.19.6/bin/pm2 delete edufund || true
 #             /root/.nvm/versions/node/v20.19.6/bin/pm2 start ecosystem.config.cjs --env production
 #             /root/.nvm/versions/node/v20.19.6/bin/pm2 save
@@ -123,6 +123,6 @@ jobs:
 
             # 6. Force Restart PM2
             # We delete and start to ensure the new dist/server.js is loaded
-            /usr/local/bin/pm2 delete edufund || true
-            /usr/local/bin/pm2 start ecosystem.config.cjs --env production
-            /usr/local/bin/pm2 save
+            /root/.nvm/versions/node/v20.19.6/bin/pm2 delete edufund || true
+            /root/.nvm/versions/node/v20.19.6/bin/pm2 start ecosystem.config.cjs --env production
+            /root/.nvm/versions/node/v20.19.6/bin/pm2 save
