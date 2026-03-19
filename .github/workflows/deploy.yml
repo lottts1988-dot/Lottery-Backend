@@ -105,7 +105,8 @@ jobs:
 
             # 3. BUILD THE PROJECT
             # This updates the dist/ folder with your new code
-            ~/.bun/bin/bun run prod
+            # ~/.bun/bin/bun run prod
+            ~/.bun/bin/bun build src/server.ts --outdir dist --target node --format esm --minify --external canvas
 
             # 4. Export environment variables for Migrations
             export DATABASE_URL="${{ secrets.DATABASE_URL }}"
