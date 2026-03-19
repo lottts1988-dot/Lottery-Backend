@@ -60,5 +60,5 @@ jobs:
 
             # 5. Reload using a more common path for PM2
             # Change /usr/local/bin/pm2 to whatever 'which pm2' told you
-            /Users/hteto2ko/.nvm/versions/node/v20.19.6/bin/pm2 startOrReload ecosystem.config.cjs --env production
-            /Users/hteto2ko/.nvm/versions/node/v20.19.6/bin/pm2 save
+            /root/.nvm/versions/node/v20.19.6/bin/pm2 startOrReload ecosystem.config.cjs --env production
+            /root/.nvm/versions/node/v20.19.6/bin/pm2 save
