@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "edufund",
-      script: ".dist/server.js",
+      script: "dist/server.js",
       interpreter: "/root/.bun/bin/bun",
       env: {
         NODE_ENV: "production",
