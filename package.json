@@ -25,9 +25,9 @@
     "@types/jsonwebtoken": "^9.0.8",
     "@types/multer": "^2.0.0",
     "@types/node": "^25.2.3",
+    "@types/pdfkit": "^0.17.5",
     "@types/pg": "^8.16.0",
     "@types/uuid": "^11.0.0",
-    "@types/pdfkit": "^0.17.5",
     "eslint": "^9.39.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
@@ -44,6 +44,7 @@
     "@prisma/adapter-pg": "^7.4.0",
     "@prisma/client": "^7.4.0",
     "bcryptjs": "^3.0.3",
+    "canvas": "^3.2.1",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
@@ -51,8 +52,8 @@
     "jsonwebtoken": "^9.0.3",
     "jwt-decode": "^3.1.2",
     "multer": "^2.0.2",
+    "pdfkit": "^0.17.2",
     "pg": "^8.18.0",
-    "canvas": "^3.2.1",
-    "pdfkit": "^0.17.2"
+    "pm2": "^6.0.14"
   }
 }
