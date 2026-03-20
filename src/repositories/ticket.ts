@@ -107,7 +107,7 @@ export class TicketRepo {
       query,
       { page, perPage },
       {},
-      { alphabet: "asc" },
+      [{ alphabet: "asc" }, { number: "asc" }],
     );
   }
 
@@ -118,6 +118,9 @@ export class TicketRepo {
   ) {
     const { date, search, status } = filters;
 
+    // const cleanSearch = search.replace("-", "").trim();
+    const cleanSearch = search?.replace(/-/g, "").trim() || "";
+
     const where: Prisma.TicketWhereInput = {
       isDeleted: false,
       ...(status && {
@@ -126,13 +129,34 @@ export class TicketRepo {
       ...(date && {
         date,
       }),
-      ...(search &&
-        search.trim() !== "" && {
-          OR: [
-            { alphabet: { contains: search, mode: "insensitive" } },
-            { number: { contains: search, mode: "insensitive" } },
-          ],
-        }),
+      // ...(search &&
+      //   search.trim() !== "" && {
+      //     OR: [
+      //       { alphabet: { contains: search, mode: "insensitive" } },
+      //       { number: { contains: search, mode: "insensitive" } },
+      //     ],
+      //   }),
+      ...(cleanSearch && {
+        OR: [
+          { alphabet: { contains: search, mode: "insensitive" } },
+          { number: { contains: search } },
+          {
+            AND: [
+              {
+                alphabet: {
+                  contains: cleanSearch.replace(/[0-9]/g, ""),
+                  mode: "insensitive",
+                },
+              },
+              {
+                number: {
+                  contains: cleanSearch.replace(/[a-zA-Z]/g, ""),
+                },
+              },
+            ],
+          },
+        ],
+      }),
     };
 
     const query: Prisma.TicketFindManyArgs = { where };
@@ -142,7 +166,7 @@ export class TicketRepo {
       query,
       { page, perPage },
       {},
-      { alphabet: "asc" },
+      [{ alphabet: "asc" }, { number: "asc" }],
     );
   }
 
