@@ -9,6 +9,7 @@
 // 02 for confirm
 // 03 for fail
 // 04 for pending
+// 05 for reserve
 
 // Order status
 // 01 for open
@@ -54,6 +55,7 @@ model Ticket {
   date          String
   annoucedate   String
   status        String
+  reservedAt    DateTime?
   t1            String?
   t2            String?
   t3            String?

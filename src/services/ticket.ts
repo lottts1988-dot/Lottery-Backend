@@ -1,6 +1,7 @@
 import type { TicketRepo } from "../repositories/ticket";
 import type { UserJwtPayload } from "../types/jwt";
 import type { TTicket, GetTicket, TicketFilter } from "../types/ticket";
+import { prisma } from "../utils/prisma";
 
 export class TicketService {
   constructor(private ticketRepo: TicketRepo) {
@@ -54,5 +55,33 @@ export class TicketService {
 
   public async deleteTicket(id: string) {
     return this.ticketRepo.deleteTicket(id);
+  }
+
+  public async reserveTickets(ticketIds: string[]) {
+    return prisma.$transaction(async (tx) => {
+      const tickets = await tx.ticket.findMany({
+        where: {
+          id: { in: ticketIds },
+          status: "01",
+        },
+      });
+
+      if (tickets.length !== ticketIds.length) {
+        throw new Error("Some tickets already reserved");
+      }
+
+      await tx.ticket.updateMany({
+        where: {
+          id: { in: ticketIds },
+          status: "01",
+        },
+        data: {
+          status: "05",
+          reservedAt: new Date(),
+        },
+      });
+
+      return {};
+    });
   }
 }

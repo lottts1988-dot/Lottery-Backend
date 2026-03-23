@@ -100,6 +100,7 @@ export const TicketScalarFieldEnum = {
   date: 'date',
   annoucedate: 'annoucedate',
   status: 'status',
+  reservedAt: 'reservedAt',
   t1: 't1',
   t2: 't2',
   t3: 't3',

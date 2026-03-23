@@ -225,6 +225,34 @@ export class TicketController {
       },
     );
 
+    router.post(
+      "/reservetickets",
+      apiKeyGuard,
+      async (req: Request, res: Response) => {
+        try {
+          const { ticketIds } = req.body;
+
+          const result = await this.ticketService.reserveTickets(ticketIds);
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
     return router;
   }
 }
