@@ -10,7 +10,7 @@ const server = http.createServer(app);
 
 export const io = new Server(server, {
   cors: {
-    origin: "https://edufund.ta2ng.com/", // restrict in production
+    origin: "*", // restrict in production
     methods: ["GET", "POST"],
   },
 });
