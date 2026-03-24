@@ -27,7 +27,7 @@ import { prisma } from "./prisma";
 
 export const startTicketCron = () => {
   cron.schedule("* * * * *", async () => {
-    const timeout = new Date(Date.now() - 1 * 60 * 1000);
+    const timeout = new Date(Date.now() - 5 * 60 * 1000);
 
     const expiredTickets = await prisma.ticket.findMany({
       where: { status: "05", reservedAt: { lt: timeout } },
