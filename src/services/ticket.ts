@@ -59,24 +59,34 @@ export class TicketService {
 
   public async reserveTickets(ticketIds: string[]) {
     return prisma.$transaction(async (tx) => {
-      const tickets = await tx.ticket.findMany({
-        where: {
-          id: { in: ticketIds },
-          status: "01",
-        },
-      });
-
-      if (tickets.length !== ticketIds.length) {
-        throw new Error("Some tickets already reserved");
-      }
-
-      await tx.ticket.updateMany({
+      const result = await tx.ticket.updateMany({
         where: {
           id: { in: ticketIds },
           status: "01",
         },
         data: {
           status: "05",
+          reservedAt: new Date(),
+        },
+      });
+
+      if (result.count !== ticketIds.length) {
+        throw new Error("Some tickets already reserved");
+      }
+
+      return {};
+    });
+  }
+
+  public async unreserveTickets(ticketIds: string[]) {
+    return prisma.$transaction(async (tx) => {
+      await tx.ticket.updateMany({
+        where: {
+          id: { in: ticketIds },
+          status: "05",
+        },
+        data: {
+          status: "01",
           reservedAt: new Date(),
         },
       });
