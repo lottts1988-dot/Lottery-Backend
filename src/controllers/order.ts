@@ -4,6 +4,7 @@ import { verifyJwt } from "../utils/jwt";
 import { ReturnCode, ReturnMessage } from "../types/response";
 import type { UpdateOrder } from "../types/order";
 import { apiKeyGuard } from "../utils/common";
+import { Dashboard } from "../utils/dashboard";
 
 export class OrderController {
   constructor(private orderService: OrderService) {}
@@ -23,9 +24,15 @@ export class OrderController {
             });
           }
           const result = await this.orderService.getOrders(req.body);
+
+          const dashboard = new Dashboard();
+          const sum = await dashboard.ticketRevenue();
+
+          console.log(`Sum ${sum}`);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,
+            // sum,
             data: result,
           });
         } catch (e: unknown) {
