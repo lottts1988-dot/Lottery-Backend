@@ -6,4 +6,10 @@ export class DashboardService {
     const result = await dashboard.ticketRevenue(year);
     return result;
   }
+
+  public async getOrderCounts(year: number) {
+    const dashboard = new Dashboard();
+    const result = await dashboard.orderCounts(year);
+    return result;
+  }
 }

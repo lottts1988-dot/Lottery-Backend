@@ -43,6 +43,40 @@ export class DashboardController {
       },
     );
 
+    router.post(
+      "/ordercounts",
+      verifyJwt,
+      async (req: Request, res: Response) => {
+        try {
+          if (!req.user) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: ReturnMessage.UNAUTHORIZED,
+            });
+          }
+          const year = req.body.year;
+
+          const result = await this.dashboardService.getOrderCounts(year);
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
     return router;
   }
 }
