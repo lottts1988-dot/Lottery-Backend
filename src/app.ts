@@ -29,6 +29,8 @@ import { UploadService } from "./services/upload";
 import { UploadController } from "./controllers/upload";
 import cors from "cors";
 import { GeneratePDFController } from "./controllers/generate-pdf";
+import { DashboardService } from "./services/dashboard";
+import { DashboardController } from "./controllers/dashboard";
 
 const app = express();
 
@@ -89,6 +91,12 @@ app.use("/result", resultController.router());
 const uploadRepo = new UploadRepo();
 const uploadService = new UploadService(uploadRepo);
 const uploadController = new UploadController(uploadService);
+
+app.use("/result", resultController.router());
+
+const dashboardService = new DashboardService();
+const dashboardController = new DashboardController(dashboardService);
+app.use("/dashboard", dashboardController.router());
 
 app.use("/images", uploadController.router());
 
