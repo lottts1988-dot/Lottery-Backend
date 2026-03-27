@@ -10,7 +10,7 @@ export class DashboardController {
     const router = Router();
 
     router.post(
-      "/getticketrevenue",
+      "/ticketrevenuepermonth",
       verifyJwt,
       async (req: Request, res: Response) => {
         try {
@@ -22,7 +22,76 @@ export class DashboardController {
           }
           const year = req.body.year;
 
-          const result = await this.dashboardService.getTicketRevenue(year);
+          const result =
+            await this.dashboardService.ticketRevenuePerMonth(year);
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
+    router.post(
+      "/ordercountspermonth",
+      verifyJwt,
+      async (req: Request, res: Response) => {
+        try {
+          if (!req.user) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: ReturnMessage.UNAUTHORIZED,
+            });
+          }
+          const year = req.body.year;
+
+          const result = await this.dashboardService.orderCountsPerMonth(year);
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
+    router.post(
+      "/ticketcounts",
+      verifyJwt,
+      async (req: Request, res: Response) => {
+        try {
+          if (!req.user) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: ReturnMessage.UNAUTHORIZED,
+            });
+          }
+          const year = req.body.year;
+
+          const result = await this.dashboardService.ticketCounts(year);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,
@@ -56,7 +125,7 @@ export class DashboardController {
           }
           const year = req.body.year;
 
-          const result = await this.dashboardService.getOrderCounts(year);
+          const result = await this.dashboardService.orderCounts(year);
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,

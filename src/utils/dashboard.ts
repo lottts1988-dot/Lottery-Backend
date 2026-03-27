@@ -1,8 +1,22 @@
 import type { Order } from "../../prisma/generated/prisma/client";
 import { prisma } from "./prisma";
 
+type MonthKeys =
+  | "jan"
+  | "feb"
+  | "mar"
+  | "apr"
+  | "may"
+  | "jun"
+  | "jul"
+  | "aug"
+  | "sep"
+  | "oct"
+  | "nov"
+  | "dec";
+
 export class Dashboard {
-  private readonly monthKeys = [
+  private readonly monthKeys: MonthKeys[] = [
     "jan",
     "feb",
     "mar",
@@ -15,19 +29,72 @@ export class Dashboard {
     "oct",
     "nov",
     "dec",
-  ] as const;
+  ];
 
-  private getMonthKey(index: number) {
+  private getMonthKey(index: number): MonthKeys {
     return this.monthKeys[index]!;
   }
 
   private initializeMonthCounts<T extends number | null>(defaultValue: T) {
     return Object.fromEntries(
       this.monthKeys.map((m) => [m, defaultValue]),
-    ) as Record<(typeof this.monthKeys)[number], T>;
+    ) as Record<MonthKeys, T>;
   }
 
-  public async ticketRevenue(year: number) {
+  private async countByStatus(
+    model: "ticket" | "order",
+    year: number,
+    statuses: Record<string, string>,
+  ): Promise<Record<string, number>> {
+    const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
+    const endDate = new Date(`${year}-12-31T23:59:59.999Z`);
+    const result: Record<string, number> = {};
+
+    await Promise.all(
+      Object.entries(statuses).map(async ([code, key]) => {
+        let count: number;
+
+        if (model === "ticket") {
+          count = await prisma.ticket.count({
+            where: {
+              isDeleted: false,
+              status: code,
+              date: { startsWith: `${year}-` },
+            },
+          });
+        } else {
+          count = await prisma.order.count({
+            where: {
+              isDeleted: false,
+              status: code,
+              createdAt: { gte: startDate, lte: endDate },
+            },
+          });
+        }
+
+        result[key] = count;
+      }),
+    );
+
+    return result;
+  }
+
+  public async ticketCounts(year: number) {
+    const statuses = {
+      "01": "open",
+      "02": "confirmed",
+      "03": "failed",
+      "04": "pending",
+    };
+    return this.countByStatus("ticket", year, statuses);
+  }
+
+  public async orderCounts(year: number) {
+    const statuses = { "01": "open", "02": "confirmed", "03": "failed" };
+    return this.countByStatus("order", year, statuses);
+  }
+
+  public async ticketRevenuePerMonth(year: number) {
     const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
     const endDate = new Date(`${year}-12-31T23:59:59.999Z`);
 
@@ -45,28 +112,29 @@ export class Dashboard {
 
     const monthlyTotals = this.initializeMonthCounts(0);
 
-    orders.forEach((order) => {
-      const monthIndex = order.createdAt.getUTCMonth();
-      const monthKey = this.getMonthKey(monthIndex);
-
+    for (const order of orders) {
+      const monthKey = this.getMonthKey(order.createdAt.getUTCMonth());
       const price = Number(order.lottery?.price || 0);
       const ticketCount = order.payment?.ticket?.length || 0;
 
       monthlyTotals[monthKey] += price * ticketCount;
-    });
+    }
 
     return monthlyTotals;
   }
 
-  public async orderCounts(year: number) {
-    type MonthKeys = (typeof this.monthKeys)[number];
+  public async orderCountsPerMonth(year: number) {
     type MonthCounts = Record<MonthKeys, number>;
-
-    const response = {
-      all: this.initializeMonthCounts(0) as MonthCounts,
-      pending: this.initializeMonthCounts(0) as MonthCounts,
-      confirmed: this.initializeMonthCounts(0) as MonthCounts,
-      failed: this.initializeMonthCounts(0) as MonthCounts,
+    const response: {
+      all: MonthCounts;
+      pending: MonthCounts;
+      confirmed: MonthCounts;
+      failed: MonthCounts;
+    } = {
+      all: this.initializeMonthCounts(0),
+      pending: this.initializeMonthCounts(0),
+      confirmed: this.initializeMonthCounts(0),
+      failed: this.initializeMonthCounts(0),
     };
 
     const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
@@ -81,9 +149,8 @@ export class Dashboard {
         select: { createdAt: true, status: true },
       });
 
-    orders.forEach((order) => {
+    for (const order of orders) {
       const monthKey = this.getMonthKey(order.createdAt.getUTCMonth());
-
       response.all[monthKey] += 1;
 
       switch (order.status) {
@@ -97,7 +164,7 @@ export class Dashboard {
           response.failed[monthKey] += 1;
           break;
       }
-    });
+    }
 
     return response;
   }
