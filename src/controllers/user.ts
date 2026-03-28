@@ -125,10 +125,10 @@ export class UserController {
               });
             }
 
-            if (newpassword.length < 8) {
+            if (newpassword.length < 4) {
               return res.json({
                 returncode: ReturnCode.FAILED,
-                message: "New password must be at least 8 characters",
+                message: "New password must be at least 4 characters",
               });
             }
 
