@@ -151,17 +151,17 @@ export class Dashboard {
 
     for (const order of orders) {
       const monthKey = this.getMonthKey(order.createdAt.getUTCMonth());
-      response.all[monthKey] += 1;
+      response.all[monthKey] += 187;
 
       switch (order.status) {
         case "01":
-          response.pending[monthKey] += 1;
+          response.pending[monthKey] += 33;
           break;
         case "02":
-          response.confirmed[monthKey] += 100;
+          response.confirmed[monthKey] += 77;
           break;
         case "03":
-          response.failed[monthKey] += 1;
+          response.failed[monthKey] += 27;
           break;
       }
     }
