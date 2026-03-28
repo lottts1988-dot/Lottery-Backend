@@ -289,6 +289,97 @@ export class UserController {
       },
     );
 
+    router.post(
+      "/updateprofile",
+      verifyJwt,
+      async (req: Request, res: Response) => {
+        try {
+          if (!req.user) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: ReturnMessage.UNAUTHORIZED,
+            });
+          }
+          const userId = req.user.id;
+          const { fullname, password, newpassword } = req.body;
+
+          const user = await prisma.user.findUnique({
+            where: { id: userId },
+          });
+
+          if (!user) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: "User not found",
+            });
+          }
+
+          if (!fullname || fullname.trim() === "") {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: "Full name is required!",
+            });
+          }
+
+          const updateData: Partial<UpdateProfile> = {
+            fullname,
+          };
+
+          const oldPassword =
+            typeof password === "string" && password.trim() !== ""
+              ? password
+              : null;
+
+          const newPassword =
+            typeof newpassword === "string" && newpassword.trim() !== ""
+              ? newpassword
+              : null;
+
+          if (oldPassword && newPassword) {
+            const isOldPasswordCorrect = await bcrypt.compare(
+              password,
+              user.password,
+            );
+
+            if (!isOldPasswordCorrect) {
+              return res.json({
+                returncode: ReturnCode.FAILED,
+                message: "Old password is incorrect",
+              });
+            }
+
+            if (newpassword.length < 8) {
+              return res.json({
+                returncode: ReturnCode.FAILED,
+                message: "New password must be at least 8 characters",
+              });
+            }
+
+            updateData.password = await bcrypt.hash(newpassword, 10);
+          }
+
+          const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: updateData,
+          });
+
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: updatedUser,
+          });
+        } catch (error) {
+          console.error(error);
+
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message:
+              error instanceof Error ? error.message : ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
     return router;
   }
 }

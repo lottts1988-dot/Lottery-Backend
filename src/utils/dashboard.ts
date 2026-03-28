@@ -151,78 +151,80 @@ export class Dashboard {
 
     for (const order of orders) {
       const monthKey = this.getMonthKey(order.createdAt.getUTCMonth());
-      response.all[monthKey] += 187;
+      response.all[monthKey] += 1;
 
       switch (order.status) {
         case "01":
-          response.pending[monthKey] += 33;
+          response.pending[monthKey] += 1;
           break;
         case "02":
-          response.confirmed[monthKey] += 77;
+          response.confirmed[monthKey] += 1;
           break;
         case "03":
-          response.failed[monthKey] += 27;
+          response.failed[monthKey] += 1;
           break;
       }
     }
 
-    return {
-      all: {
-        jan: 43,
-        feb: 323,
-        mar: 127,
-        apr: 323,
-        may: 310,
-        jun: 530,
-        jul: 535,
-        aug: 454,
-        sep: 753,
-        oct: 832,
-        nov: 131,
-        dec: 981,
-      },
-      pending: {
-        jan: 40,
-        feb: 223,
-        mar: 99,
-        apr: 23,
-        may: 132,
-        jun: 312,
-        jul: 342,
-        aug: 12,
-        sep: 632,
-        oct: 743,
-        nov: 365,
-        dec: 54,
-      },
-      confirmed: {
-        jan: 3,
-        feb: 64,
-        mar: 77,
-        apr: 300,
-        may: 22,
-        jun: 42,
-        jul: 422,
-        aug: 132,
-        sep: 564,
-        oct: 543,
-        nov: 133,
-        dec: 34,
-      },
-      failed: {
-        jan: 0,
-        feb: 36,
-        mar: 27,
-        apr: 10,
-        may: 0,
-        jun: 0,
-        jul: 7,
-        aug: 0,
-        sep: 0,
-        oct: 0,
-        nov: 21,
-        dec: 0,
-      },
-    };
+    return response;
   }
 }
+
+// {
+//         "all": {
+//             "jan": 43,
+//             "feb": 323,
+//             "mar": 127,
+//             "apr": 323,
+//             "may": 310,
+//             "jun": 530,
+//             "jul": 535,
+//             "aug": 454,
+//             "sep": 753,
+//             "oct": 832,
+//             "nov": 131,
+//             "dec": 981
+//         },
+//         "pending": {
+//             "jan": 40,
+//             "feb": 223,
+//             "mar": 99,
+//             "apr": 23,
+//             "may": 132,
+//             "jun": 312,
+//             "jul": 342,
+//             "aug": 12,
+//             "sep": 632,
+//             "oct": 743,
+//             "nov": 365,
+//             "dec": 54
+//         },
+//         "confirmed": {
+//             "jan": 3,
+//             "feb": 64,
+//             "mar": 77,
+//             "apr": 300,
+//             "may": 22,
+//             "jun": 42,
+//             "jul": 422,
+//             "aug": 132,
+//             "sep": 564,
+//             "oct": 543,
+//             "nov": 133,
+//             "dec": 34
+//         },
+//         "failed": {
+//             "jan": 0,
+//             "feb": 36,
+//             "mar": 27,
+//             "apr": 10,
+//             "may": 0,
+//             "jun": 0,
+//             "jul": 7,
+//             "aug": 0,
+//             "sep": 0,
+//             "oct": 0,
+//             "nov": 21,
+//             "dec": 0
+//         }
+//     }
