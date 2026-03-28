@@ -158,7 +158,7 @@ export class Dashboard {
           response.pending[monthKey] += 1;
           break;
         case "02":
-          response.confirmed[monthKey] += 1;
+          response.confirmed[monthKey] += 100;
           break;
         case "03":
           response.failed[monthKey] += 1;
