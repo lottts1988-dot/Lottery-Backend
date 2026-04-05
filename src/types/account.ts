@@ -2,6 +2,7 @@ export interface TAccount {
   phone: string;
   name: string;
   cardid: string;
+  t1?: string;
 }
 
 export interface GetAccount {

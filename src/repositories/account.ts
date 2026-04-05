@@ -10,7 +10,7 @@ import { prisma } from "../utils/prisma";
 
 export class AccountRepo {
   public async createAccount(data: TAccount, reqUser: UserJwtPayload) {
-    const { name, phone, cardid } = data;
+    const { name, phone, cardid, t1 } = data;
 
     const userid = reqUser.id;
 
@@ -20,6 +20,7 @@ export class AccountRepo {
         name,
         phone,
         cardid,
+        t1,
       },
       include: { card: true },
     });
@@ -58,7 +59,7 @@ export class AccountRepo {
       { updatedAt: "desc" },
     );
   }
-  
+
   public async getAccountsByAdmin(
     page: number,
     perPage: number,
@@ -92,7 +93,7 @@ export class AccountRepo {
   }
 
   public async updateAccount(id: string, data: TAccount) {
-    const { name, phone, cardid } = data;
+    const { name, phone, cardid, t1 } = data;
 
     const result = prisma.account.update({
       where: { id },
@@ -100,6 +101,7 @@ export class AccountRepo {
         name,
         phone,
         cardid,
+        t1,
       },
       include: { card: true },
     });
