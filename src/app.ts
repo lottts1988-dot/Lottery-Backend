@@ -36,7 +36,7 @@ const app = express();
 
 //// Security Secure
 app.use(cors());
-app.use(express.json({ limit: "20000kb" }));
+app.use(express.json({ limit: "50mb" }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -107,7 +107,7 @@ app.use("/pdf", generatePDFController.router());
 app.get("/", (_req, res) => {
   res
     .status(200)
-    .json({ returncode: "200", message: "Lottery API V1.1.12 is working..." });
+    .json({ returncode: "200", message: "Lottery API V1.1.13 is working..." });
 });
 
 export default app;
