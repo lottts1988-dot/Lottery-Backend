@@ -105,14 +105,25 @@ export class OrderRepo {
       }
     }
 
-    await prisma.ticket.updateMany({
-      where: {
-        id: { in: ticketls },
-      },
-      data: {
-        status,
-      },
-    });
+    if (status == "03") {
+      await prisma.ticket.updateMany({
+        where: {
+          id: { in: ticketls },
+        },
+        data: {
+          status: "01",
+        },
+      });
+    } else {
+      await prisma.ticket.updateMany({
+        where: {
+          id: { in: ticketls },
+        },
+        data: {
+          status,
+        },
+      });
+    }
 
     const result = prisma.order.update({
       where: { id },
