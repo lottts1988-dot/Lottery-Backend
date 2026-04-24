@@ -193,10 +193,10 @@ export class OrderRepo {
     perPage: number,
     filters: OrderFilter,
   ) {
-    const { startdate, enddate, search } = filters;
+    const { startdate, enddate } = filters;
 
     // -----------------------------
-    // 1. Ticket WHERE (SOURCE OF TRUTH)
+    // 1. TICKETS (SOURCE OF TRUTH)
     // -----------------------------
     const where: Prisma.TicketWhereInput = {
       isDeleted: false,
@@ -210,29 +210,10 @@ export class OrderRepo {
             },
           }
         : {}),
-
-      ...(search && search.trim() !== ""
-        ? {
-            OR: [
-              {
-                number: {
-                  contains: search,
-                  mode: "insensitive",
-                },
-              },
-              {
-                alphabet: {
-                  contains: search,
-                  mode: "insensitive",
-                },
-              },
-            ],
-          }
-        : {}),
     };
 
     // -----------------------------
-    // 2. PAGINATE TICKETS (FAST)
+    // 2. PAGINATE TICKETS
     // -----------------------------
     const [tickets, total] = await Promise.all([
       prisma.ticket.findMany({
@@ -250,7 +231,7 @@ export class OrderRepo {
     ]);
 
     // -----------------------------
-    // 3. NO RELATIONS → MANUAL JOIN
+    // 3. GET PAYMENTS (FIXED)
     // -----------------------------
     const paymentIds = [...new Set(tickets.map((t) => t.id).filter(Boolean))];
 
@@ -263,6 +244,9 @@ export class OrderRepo {
 
     const paymentMap = new Map(payments.map((p) => [p.id, p]));
 
+    // -----------------------------
+    // 4. GET ORDERS (FIXED)
+    // -----------------------------
     const orderIds = [...new Set(payments.map((p) => p.id).filter(Boolean))];
 
     const orders = await prisma.order.findMany({
@@ -275,7 +259,7 @@ export class OrderRepo {
     const orderMap = new Map(orders.map((o) => [o.id, o]));
 
     // -----------------------------
-    // 4. MERGE RESULT (FINAL OUTPUT)
+    // 5. MERGE DATA (FIXED JOINS)
     // -----------------------------
     const data = tickets.map((ticket) => {
       const payment = paymentMap.get(ticket.id);
@@ -294,8 +278,10 @@ export class OrderRepo {
         updatedAt: ticket.updatedAt,
         userid: ticket.userid,
 
-        // enriched fields
+        // FROM ORDER
         invoiceno: order?.invoiceno ?? null,
+
+        // FROM PAYMENT
         name: payment?.name ?? null,
         address: payment?.address ?? null,
         phone: payment?.phone ?? null,
@@ -303,7 +289,7 @@ export class OrderRepo {
     });
 
     // -----------------------------
-    // 5. META (CORRECT)
+    // 6. META
     // -----------------------------
     const totalPages = Math.ceil(total / perPage);
 
