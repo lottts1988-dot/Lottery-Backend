@@ -45,7 +45,7 @@ export class OrderController {
     );
 
     router.post(
-      "/getconfirmedorder",
+      "/getconfirmedorderexport",
       verifyJwt,
       async (req: Request, res: Response) => {
         try {
@@ -60,6 +60,7 @@ export class OrderController {
           return res.json({
             returncode: ReturnCode.SUCCESS,
             message: ReturnMessage.SUCCESS,
+            len: result.length,
             data: result,
           });
         } catch (e: unknown) {
