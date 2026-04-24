@@ -187,4 +187,136 @@ export class OrderRepo {
 
     return data;
   }
+
+  public async getConfirmedOrder(
+    page: number,
+    perPage: number,
+    filters: OrderFilter,
+  ) {
+    const { startdate, enddate, search } = filters;
+
+    // -----------------------------
+    // 1. Ticket WHERE (SOURCE OF TRUTH)
+    // -----------------------------
+    const where: Prisma.TicketWhereInput = {
+      isDeleted: false,
+      status: "02",
+
+      ...(startdate || enddate
+        ? {
+            createdAt: {
+              ...(startdate && { gte: new Date(`${startdate}T00:00:00.000Z`) }),
+              ...(enddate && { lte: new Date(`${enddate}T23:59:59.999Z`) }),
+            },
+          }
+        : {}),
+
+      ...(search && search.trim() !== ""
+        ? {
+            OR: [
+              {
+                number: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+              {
+                alphabet: {
+                  contains: search,
+                  mode: "insensitive",
+                },
+              },
+            ],
+          }
+        : {}),
+    };
+
+    // -----------------------------
+    // 2. PAGINATE TICKETS (FAST)
+    // -----------------------------
+    const [tickets, total] = await Promise.all([
+      prisma.ticket.findMany({
+        where,
+        skip: (page - 1) * perPage,
+        take: perPage,
+        orderBy: [
+          { alphabet: "asc" },
+          { number: "asc" },
+          { createdAt: "desc" },
+        ],
+      }),
+
+      prisma.ticket.count({ where }),
+    ]);
+
+    // -----------------------------
+    // 3. NO RELATIONS → MANUAL JOIN
+    // -----------------------------
+    const paymentIds = [...new Set(tickets.map((t) => t.id).filter(Boolean))];
+
+    const payments = await prisma.payment.findMany({
+      where: {
+        id: { in: paymentIds },
+        isDeleted: false,
+      },
+    });
+
+    const paymentMap = new Map(payments.map((p) => [p.id, p]));
+
+    const orderIds = [...new Set(payments.map((p) => p.id).filter(Boolean))];
+
+    const orders = await prisma.order.findMany({
+      where: {
+        id: { in: orderIds },
+        isDeleted: false,
+      },
+    });
+
+    const orderMap = new Map(orders.map((o) => [o.id, o]));
+
+    // -----------------------------
+    // 4. MERGE RESULT (FINAL OUTPUT)
+    // -----------------------------
+    const data = tickets.map((ticket) => {
+      const payment = paymentMap.get(ticket.id);
+      const order = payment ? orderMap.get(payment.id) : null;
+
+      return {
+        id: ticket.id,
+        alphabet: ticket.alphabet,
+        number: ticket.number,
+        time: ticket.time,
+        date: ticket.date,
+        annoucedate: ticket.annoucedate,
+        status: ticket.status,
+        reservedAt: ticket.reservedAt,
+        createdAt: ticket.createdAt,
+        updatedAt: ticket.updatedAt,
+        userid: ticket.userid,
+
+        // enriched fields
+        invoiceno: order?.invoiceno ?? null,
+        name: payment?.name ?? null,
+        address: payment?.address ?? null,
+        phone: payment?.phone ?? null,
+      };
+    });
+
+    // -----------------------------
+    // 5. META (CORRECT)
+    // -----------------------------
+    const totalPages = Math.ceil(total / perPage);
+
+    return {
+      data,
+      meta: {
+        total,
+        currentPage: page,
+        perPage,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
+    };
+  }
 }
