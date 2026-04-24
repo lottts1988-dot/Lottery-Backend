@@ -169,7 +169,9 @@ export class OrderRepo {
         include: {
           payment: {
             include: {
-              ticket: true,
+              ticket: {
+                orderBy: [{ alphabet: "asc" }, { number: "asc" }],
+              },
             },
           },
         },
