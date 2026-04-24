@@ -143,4 +143,62 @@ export class OrderRepo {
 
     return result;
   }
+
+  public async getConfirmedOrder(
+    page: number,
+    perPage: number,
+    filters: OrderFilter,
+  ) {
+    const { startdate, enddate } = filters;
+    const where: Prisma.OrderWhereInput = {
+      isDeleted: false,
+      status: "02",
+      createdAt: {
+        ...(startdate && { gte: new Date(`${startdate}T00:00:00.000Z`) }),
+        ...(enddate && { lte: new Date(`${enddate}T23:59:59.999Z`) }),
+      },
+    };
+
+    const [orders, total] = await Promise.all([
+      prisma.order.findMany({
+        where,
+        skip: (page - 1) * perPage,
+        take: perPage,
+        orderBy: { createdAt: "desc" },
+
+        include: {
+          payment: {
+            include: {
+              ticket: true,
+            },
+          },
+        },
+      }),
+
+      prisma.order.count({ where }),
+    ]);
+
+    const data = orders.flatMap(
+      (order) =>
+        order.payment?.ticket?.map((ticket) => ({
+          ...ticket,
+          invoiceno: order.invoiceno,
+          name: order.payment?.name,
+          address: order.payment?.address,
+          phone: order.payment?.phone,
+        })) ?? [],
+    );
+
+    return {
+      data,
+      meta: {
+        total,
+        currentPage: page,
+        perPage,
+        totalPages: Math.ceil(total / perPage),
+        hasNextPage: page * perPage < total,
+        hasPreviousPage: page > 1,
+      },
+    };
+  }
 }

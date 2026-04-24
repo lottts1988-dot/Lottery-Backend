@@ -25,6 +25,20 @@ export class OrderService {
     return orders;
   }
 
+  public async getConfirmedOrder(data: GetOrder) {
+    const { page = 1, limit = 20 } = data;
+
+    const filters: OrderFilter = data;
+
+    const orders = await this.orderRepo.getConfirmedOrder(
+      Number(page),
+      Number(limit),
+      filters,
+    );
+
+    return orders;
+  }
+
   public async getOrderByINV(data: INVFilter) {
     const filters: INVFilter = data;
     return this.orderRepo.getOrderByINV(filters);
