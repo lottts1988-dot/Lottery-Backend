@@ -195,103 +195,65 @@ export class OrderRepo {
   ) {
     const { startdate, enddate } = filters;
 
-    // -----------------------------
-    // 1. TICKETS (SOURCE OF TRUTH)
-    // -----------------------------
-    const where: Prisma.TicketWhereInput = {
+    const where: Prisma.OrderWhereInput = {
       isDeleted: false,
       status: "02",
-
-      ...(startdate || enddate
-        ? {
-            createdAt: {
-              ...(startdate && { gte: new Date(`${startdate}T00:00:00.000Z`) }),
-              ...(enddate && { lte: new Date(`${enddate}T23:59:59.999Z`) }),
-            },
-          }
-        : {}),
+      createdAt: {
+        ...(startdate && { gte: new Date(`${startdate}T00:00:00.000Z`) }),
+        ...(enddate && { lte: new Date(`${enddate}T23:59:59.999Z`) }),
+      },
     };
 
     // -----------------------------
-    // 2. PAGINATE TICKETS
+    // 1. GET ALL ORDERS WITH RELATIONS
     // -----------------------------
-    const [tickets, total] = await Promise.all([
-      prisma.ticket.findMany({
-        where,
-        skip: (page - 1) * perPage,
-        take: perPage,
-        orderBy: [
-          { alphabet: "asc" },
-          { number: "asc" },
-          { createdAt: "desc" },
-        ],
-      }),
-
-      prisma.ticket.count({ where }),
-    ]);
-
-    // -----------------------------
-    // 3. GET PAYMENTS (FIXED)
-    // -----------------------------
-    const paymentIds = [...new Set(tickets.map((t) => t.id).filter(Boolean))];
-
-    const payments = await prisma.payment.findMany({
-      where: {
-        id: { in: paymentIds },
-        isDeleted: false,
-      },
-    });
-
-    const paymentMap = new Map(payments.map((p) => [p.id, p]));
-
-    // -----------------------------
-    // 4. GET ORDERS (FIXED)
-    // -----------------------------
-    const orderIds = [...new Set(payments.map((p) => p.id).filter(Boolean))];
-
     const orders = await prisma.order.findMany({
-      where: {
-        id: { in: orderIds },
-        isDeleted: false,
+      where,
+      include: {
+        payment: {
+          include: {
+            ticket: {
+              orderBy: [{ alphabet: "asc" }, { number: "asc" }],
+            },
+          },
+        },
       },
-    });
-
-    const orderMap = new Map(orders.map((o) => [o.id, o]));
-
-    // -----------------------------
-    // 5. MERGE DATA (FIXED JOINS)
-    // -----------------------------
-    const data = tickets.map((ticket) => {
-      const payment = paymentMap.get(ticket.id);
-      const order = payment ? orderMap.get(payment.id) : null;
-
-      return {
-        id: ticket.id,
-        alphabet: ticket.alphabet,
-        number: ticket.number,
-        time: ticket.time,
-        date: ticket.date,
-        annoucedate: ticket.annoucedate,
-        status: ticket.status,
-        reservedAt: ticket.reservedAt,
-        createdAt: ticket.createdAt,
-        updatedAt: ticket.updatedAt,
-        userid: ticket.userid,
-
-        // FROM ORDER
-        invoiceno: order?.invoiceno ?? null,
-
-        // FROM PAYMENT
-        name: payment?.name ?? null,
-        address: payment?.address ?? null,
-        phone: payment?.phone ?? null,
-      };
+      orderBy: { createdAt: "desc" },
     });
 
     // -----------------------------
-    // 6. META
+    // 2. FLATTEN ALL TICKETS
     // -----------------------------
-    const totalPages = Math.ceil(total / perPage);
+    const flat = orders.flatMap(
+      (order) =>
+        order.payment?.ticket?.map((ticket) => ({
+          id: ticket.id,
+          alphabet: ticket.alphabet,
+          number: ticket.number,
+          time: ticket.time,
+          date: ticket.date,
+          annoucedate: ticket.annoucedate,
+          status: ticket.status,
+          reservedAt: ticket.reservedAt,
+          createdAt: ticket.createdAt,
+          updatedAt: ticket.updatedAt,
+          userid: ticket.userid,
+
+          invoiceno: order.invoiceno ?? null,
+          name: order.payment?.name ?? null,
+          address: order.payment?.address ?? null,
+          phone: order.payment?.phone ?? null,
+        })) ?? [],
+    );
+
+    // -----------------------------
+    // 3. PAGINATION ON TICKETS (IMPORTANT)
+    // -----------------------------
+    const total = flat.length;
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+
+    const data = flat.slice(start, end);
 
     return {
       data,
@@ -299,8 +261,8 @@ export class OrderRepo {
         total,
         currentPage: page,
         perPage,
-        totalPages,
-        hasNextPage: page < totalPages,
+        totalPages: Math.ceil(total / perPage),
+        hasNextPage: end < total,
         hasPreviousPage: page > 1,
       },
     };
