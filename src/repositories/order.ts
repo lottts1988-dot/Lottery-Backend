@@ -144,11 +144,7 @@ export class OrderRepo {
     return result;
   }
 
-  public async getConfirmedOrder(
-    page: number,
-    perPage: number,
-    filters: OrderFilter,
-  ) {
+  public async getConfirmedOrderExport(filters: OrderFilter) {
     const { startdate, enddate } = filters;
     const where: Prisma.OrderWhereInput = {
       isDeleted: false,
@@ -159,11 +155,9 @@ export class OrderRepo {
       },
     };
 
-    const [orders, total] = await Promise.all([
+    const [orders] = await Promise.all([
       prisma.order.findMany({
         where,
-        skip: (page - 1) * perPage,
-        take: perPage,
         orderBy: { createdAt: "desc" },
 
         include: {
@@ -191,16 +185,6 @@ export class OrderRepo {
         })) ?? [],
     );
 
-    return {
-      data,
-      meta: {
-        total,
-        currentPage: page,
-        perPage,
-        totalPages: Math.ceil(total / perPage),
-        hasNextPage: page * perPage < total,
-        hasPreviousPage: page > 1,
-      },
-    };
+    return data;
   }
 }

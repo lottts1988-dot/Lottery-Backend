@@ -25,16 +25,10 @@ export class OrderService {
     return orders;
   }
 
-  public async getConfirmedOrder(data: GetOrder) {
-    const { page = 1, limit = 20 } = data;
-
+  public async getConfirmedOrderExport(data: GetOrder) {
     const filters: OrderFilter = data;
 
-    const orders = await this.orderRepo.getConfirmedOrder(
-      Number(page),
-      Number(limit),
-      filters,
-    );
+    const orders = await this.orderRepo.getConfirmedOrderExport(filters);
 
     return orders;
   }

@@ -55,7 +55,7 @@ export class OrderController {
               message: ReturnMessage.UNAUTHORIZED,
             });
           }
-          const result = await this.orderService.getConfirmedOrder(req.body);
+          const result = await this.orderService.getConfirmedOrderExport(req.body);
 
           return res.json({
             returncode: ReturnCode.SUCCESS,
