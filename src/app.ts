@@ -108,7 +108,7 @@ app.use("/pdf", generatePDFController.router());
 app.get("/", (_req, res) => {
   res
     .status(200)
-    .json({ returncode: "200", message: "Lottery API V1.1.16 is working..." });
+    .json({ returncode: "200", message: "Lottery API V1.1.17 is working..." });
 });
 
 export default app;

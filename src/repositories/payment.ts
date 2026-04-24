@@ -1,3 +1,4 @@
+import { io } from "../server";
 import type { TPayment } from "../types/payment";
 import { generateInvoice, getCurrentMonthString } from "../utils/common";
 import { prisma } from "../utils/prisma";
@@ -51,6 +52,10 @@ export class PaymentRepo {
         lottery: true,
       },
     });
+
+    io.emit("new_order", result);
+
+    console.log("Emit order", result);
     return result;
   }
 }
