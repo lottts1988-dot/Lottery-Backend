@@ -209,9 +209,7 @@ export class OrderRepo {
       include: {
         payment: {
           include: {
-            ticket: {
-              orderBy: [{ alphabet: "asc" }, { number: "asc" }],
-            },
+            ticket: true, // remove orderBy here (not needed)
           },
         },
       },
@@ -238,6 +236,14 @@ export class OrderRepo {
           phone: order.payment?.phone ?? null,
         })) ?? [],
     );
+
+    // ✅ GLOBAL SORT
+    flat.sort((a, b) => {
+      if (a.alphabet !== b.alphabet) {
+        return a.alphabet.localeCompare(b.alphabet);
+      }
+      return Number(a.number) - Number(b.number);
+    });
 
     const total = flat.length;
     const start = (page - 1) * perPage;
