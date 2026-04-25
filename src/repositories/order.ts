@@ -204,9 +204,6 @@ export class OrderRepo {
       },
     };
 
-    // -----------------------------
-    // 1. GET ALL ORDERS WITH RELATIONS
-    // -----------------------------
     const orders = await prisma.order.findMany({
       where,
       include: {
@@ -218,12 +215,8 @@ export class OrderRepo {
           },
         },
       },
-      orderBy: { createdAt: "desc" },
     });
 
-    // -----------------------------
-    // 2. FLATTEN ALL TICKETS
-    // -----------------------------
     const flat = orders.flatMap(
       (order) =>
         order.payment?.ticket?.map((ticket) => ({
@@ -246,9 +239,6 @@ export class OrderRepo {
         })) ?? [],
     );
 
-    // -----------------------------
-    // 3. PAGINATION ON TICKETS (IMPORTANT)
-    // -----------------------------
     const total = flat.length;
     const start = (page - 1) * perPage;
     const end = start + perPage;
