@@ -191,4 +191,12 @@ export class TicketRepo {
 
     return result;
   }
+
+  public async deleteAllTickets(date: string) {
+    const result = prisma.ticket.deleteMany({
+      where: { date },
+    });
+
+    return result;
+  }
 }

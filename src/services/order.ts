@@ -55,6 +55,10 @@ export class OrderService {
     return this.orderRepo.updateOrderStatus(id, data);
   }
 
+  public async updateManyOrderStatus(ids: string[], data: UpdateOrder) {
+    return this.orderRepo.updateManyOrderStatus(ids, data);
+  }
+
   public async deleteOrder(id: string) {
     return this.orderRepo.deleteOrder(id);
   }

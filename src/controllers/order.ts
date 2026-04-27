@@ -189,6 +189,51 @@ export class OrderController {
     );
 
     router.post(
+      "/updatemanyorderstatus",
+      verifyJwt,
+      async (req: Request, res: Response) => {
+        try {
+          if (!req.user) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: ReturnMessage.UNAUTHORIZED,
+            });
+          }
+          const ids: string[] = req.body.ids;
+          if (!ids) {
+            return res.json({
+              ReturnCode: ReturnCode.FAILED,
+              message: ReturnMessage.IDREQUIRED,
+            });
+          }
+
+          const data: UpdateOrder = req.body;
+
+          const result = await this.orderService.updateManyOrderStatus(
+            ids,
+            data,
+          );
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
+    router.post(
       "/deleteorder",
       verifyJwt,
       async (req: Request, res: Response) => {

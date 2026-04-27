@@ -281,6 +281,39 @@ export class TicketController {
       },
     );
 
+    router.post(
+      "/deletealltickets",
+      verifyJwt,
+      async (req: Request, res: Response) => {
+        try {
+          if (!req.user) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: ReturnMessage.UNAUTHORIZED,
+            });
+          }
+          const date: string = req.body.date;
+          const result = await this.ticketService.deleteAllTickets(date);
+          return res.json({
+            returncode: ReturnCode.SUCCESS,
+            message: ReturnMessage.SUCCESS,
+            data: result.count,
+          });
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            return res.json({
+              returncode: ReturnCode.FAILED,
+              message: e.message,
+            });
+          }
+          return res.json({
+            returncode: ReturnCode.FAILED,
+            message: ReturnMessage.FAILED,
+          });
+        }
+      },
+    );
+
     return router;
   }
 }

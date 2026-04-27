@@ -135,6 +135,55 @@ export class OrderRepo {
     return result;
   }
 
+  public async updateManyOrderStatus(ids: string[], data: UpdateOrder) {
+    const { status } = data;
+
+    const orders = await prisma.order.findMany({
+      where: {
+        id: { in: ids },
+      },
+      include: {
+        payment: {
+          include: {
+            ticket: true,
+          },
+        },
+      },
+    });
+
+    const ticketIds: string[] = [];
+
+    for (const order of orders) {
+      if (order?.payment?.ticket) {
+        for (const ticket of order.payment.ticket) {
+          ticketIds.push(ticket.id);
+        }
+      }
+    }
+
+    if (ticketIds.length > 0) {
+      await prisma.ticket.updateMany({
+        where: {
+          id: { in: ticketIds },
+        },
+        data: {
+          status: status === "03" ? "01" : status,
+        },
+      });
+    }
+    const [, result] = await prisma.$transaction([
+      prisma.order.updateMany({
+        where: { id: { in: ids } },
+        data: { status },
+      }),
+      prisma.order.findMany({
+        where: { id: { in: ids } },
+      }),
+    ]);
+
+    return result;
+  }
+
   public async deleteOrder(id: string) {
     const result = prisma.order.update({
       where: { id },
@@ -209,7 +258,7 @@ export class OrderRepo {
       include: {
         payment: {
           include: {
-            ticket: true, // remove orderBy here (not needed)
+            ticket: true,
           },
         },
       },
@@ -237,7 +286,6 @@ export class OrderRepo {
         })) ?? [],
     );
 
-    // ✅ GLOBAL SORT
     flat.sort((a, b) => {
       if (a.alphabet !== b.alphabet) {
         return a.alphabet.localeCompare(b.alphabet);

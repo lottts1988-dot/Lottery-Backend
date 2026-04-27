@@ -94,4 +94,8 @@ export class TicketService {
       return {};
     });
   }
+
+  public async deleteAllTickets(date: string) {
+    return this.ticketRepo.deleteAllTickets(date);
+  }
 }
