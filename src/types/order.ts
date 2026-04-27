@@ -12,6 +12,8 @@ export interface OrderFilter {
   search: string;
   startdate: string;
   enddate: string;
+  alphabet?: string;
+  number?: string;
 }
 
 export interface INVFilter {

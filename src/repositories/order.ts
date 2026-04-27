@@ -242,8 +242,9 @@ export class OrderRepo {
     perPage: number,
     filters: OrderFilter,
   ) {
-    const { startdate, enddate } = filters;
+    const { startdate, enddate, alphabet, number, search } = filters;
 
+    const cleanSearch = search?.replace(/-/g, "").trim() || "";
     const where: Prisma.OrderWhereInput = {
       isDeleted: false,
       status: "02",
@@ -258,7 +259,33 @@ export class OrderRepo {
       include: {
         payment: {
           include: {
-            ticket: true,
+            ticket: {
+              where: {
+                ...(alphabet && { alphabet }),
+                ...(number && { number }),
+                ...(cleanSearch && {
+                  OR: [
+                    { alphabet: { contains: search, mode: "insensitive" } },
+                    { number: { contains: search } },
+                    {
+                      AND: [
+                        {
+                          alphabet: {
+                            contains: cleanSearch.replace(/[0-9]/g, ""),
+                            mode: "insensitive",
+                          },
+                        },
+                        {
+                          number: {
+                            contains: cleanSearch.replace(/[a-zA-Z]/g, ""),
+                          },
+                        },
+                      ],
+                    },
+                  ],
+                }),
+              },
+            },
           },
         },
       },

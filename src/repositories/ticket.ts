@@ -116,9 +116,8 @@ export class TicketRepo {
     perPage: number,
     filters: TicketFilter,
   ) {
-    const { date, search, status } = filters;
+    const { date, search, status, alphabet, number } = filters;
 
-    // const cleanSearch = search.replace("-", "").trim();
     const cleanSearch = search?.replace(/-/g, "").trim() || "";
 
     const where: Prisma.TicketWhereInput = {
@@ -129,13 +128,12 @@ export class TicketRepo {
       ...(date && {
         date,
       }),
-      // ...(search &&
-      //   search.trim() !== "" && {
-      //     OR: [
-      //       { alphabet: { contains: search, mode: "insensitive" } },
-      //       { number: { contains: search, mode: "insensitive" } },
-      //     ],
-      //   }),
+      ...(alphabet && { alphabet }),
+      ...(number && {
+        number: {
+          contains: number,
+        },
+      }),
       ...(cleanSearch && {
         OR: [
           { alphabet: { contains: search, mode: "insensitive" } },
